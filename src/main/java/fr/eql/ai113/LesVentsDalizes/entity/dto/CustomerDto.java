@@ -6,11 +6,6 @@ import java.time.LocalDate;
  */
 
 public class CustomerDto {
-    //***********************7
-
-
-
-
 
         private Integer id;
 

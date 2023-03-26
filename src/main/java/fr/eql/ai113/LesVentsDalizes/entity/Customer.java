@@ -9,7 +9,7 @@ import java.time.LocalDate;
  */
 @Entity
 @Table(name = "customers")
-@Inheritance(strategy = InheritanceType.JOINED)
+//@Inheritance(strategy = InheritanceType.JOINED)
 public class Customer {
 
     @Id
@@ -26,8 +26,8 @@ public class Customer {
     @Column(name = "subscription_date")
     private LocalDate subscriptionDate;
 
-    @Column(name = "mail")
-    private String mail;
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "password")
     private String password;
@@ -53,16 +53,16 @@ public class Customer {
      * @param name name of the customer
      * @param surname lastname of the customer
      * @param birthdate
-     * @param mail
+     * @param email
      * @param password
      * @param phoneNumber
      * @param accountClosingDate
      */
-    public Customer(String name, String surname, LocalDate birthdate, String mail, String password, String phoneNumber, LocalDate accountClosingDate) {
+    public Customer(String name, String surname, LocalDate birthdate, String email, String password, String phoneNumber, LocalDate accountClosingDate) {
         this.name = name;
         this.surname = surname;
         this.birthdate = birthdate;
-        this.mail = mail;
+        this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.accountClosingDate = accountClosingDate;
@@ -92,8 +92,8 @@ public class Customer {
         return subscriptionDate;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {
@@ -131,8 +131,8 @@ public class Customer {
         this.subscriptionDate = subscriptionDate;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String mail) {
+        this.email = mail;
     }
 
     public void setPassword(String password) {
