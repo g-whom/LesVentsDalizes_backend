@@ -2,6 +2,9 @@ package fr.eql.ai113.LesVentsDalizes.entity;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 /**
@@ -16,8 +19,12 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull(message = "le nom doit etre renseigné")
+    @NotEmpty(message = "le nom doit etre renseigné")
     @Column(name = "name")
     private String name;
+    @NotNull(message = "le prénom doit etre renseigné")
+    @NotEmpty(message = "le prénom doit etre renseigné")
     @Column(name = "surname")
     private String surname;
     @Column(name = "birthdate")
@@ -26,12 +33,18 @@ public class Customer {
     @Column(name = "subscription_date")
     private LocalDate subscriptionDate;
 
+    /**
+     *
+     */
+    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "format de email est invalide")
     @Column(name = "email")
     private String email;
 
     @Column(name = "password")
     private String password;
 
+    @NotNull(message = "le numéro de téléphone doit etre renseigné")
+    @NotEmpty(message = "le numéro de téléphone doit etre renseigné")
     @Column(name = "phone_number")
 
     private String phoneNumber;

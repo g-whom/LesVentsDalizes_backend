@@ -1,5 +1,7 @@
 package fr.eql.ai113.LesVentsDalizes.entity.dto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 /**
  * This class represents a customer in the customer management system
@@ -8,6 +10,7 @@ import java.time.LocalDate;
 public class CustomerDto {
 
         private Integer id;
+
 
         private String name;
 

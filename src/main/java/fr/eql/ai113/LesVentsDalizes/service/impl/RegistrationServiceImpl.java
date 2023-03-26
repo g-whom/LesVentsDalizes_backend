@@ -6,11 +6,14 @@ import fr.eql.ai113.LesVentsDalizes.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.validation.Validator;
+
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
 
     //injecté par le setter
     private CustomerDao customerDao;
+
     @Override
     public Customer checkIfLoginAvailable(String email) {
        // return  customerDao.existsByEmail(email);
@@ -20,7 +23,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public Customer createAccount(Customer customer) {
+    public Customer createCustomerAccount(Customer customer) {
         //return null;
         return customerDao.save(customer);
     }
@@ -36,4 +39,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     public void setCustomerDao(CustomerDao customerDao) {
         this.customerDao = customerDao;
     }
+
+
 }
