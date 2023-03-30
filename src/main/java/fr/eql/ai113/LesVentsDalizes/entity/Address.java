@@ -1,6 +1,8 @@
 package fr.eql.ai113.LesVentsDalizes.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +17,8 @@ public class Address {
 
     @Column(name = "number_road")
     private String numberRoad;
+    @NotNull(message = "La voie doit etre renseignée")
+    @NotEmpty(message = "la voie doit etre renseignée")
     @Column(name = "road")
     private String road;
     @Column(name = "zip_code")

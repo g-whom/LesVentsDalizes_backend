@@ -56,16 +56,21 @@ public class RegistrationRestController  {
         Validator validator1 = factory.getValidator();
 
         Set<ConstraintViolation<Customer>> violations = validator1.validate(customer);
+        Set<ConstraintViolation<Address>> violations2 = validator1.validate(customer.getAddress());
 
 
         //WIP : champs du client | After traiter champs de l'adresse ?!
-        if (!violations.isEmpty()) {
+        if (!violations.isEmpty() ||  !violations2.isEmpty()){
             logger.info("au moins 1 violation detectée");
             //liste des violations trouvées
             List<String> erros = new ArrayList<>();
             for (ConstraintViolation<Customer> violation : violations) {
                 String errorMessage = violation.getPropertyPath() + ": " + violation.getMessage();
                 erros.add(errorMessage);
+            }
+            for(ConstraintViolation<Address> violation2 : violations2){
+                String errorMessageAdress = violation2.getPropertyPath()+ ": " + violation2.getMessage();
+                erros.add(errorMessageAdress);
             }
             return ResponseEntity.badRequest().body(erros);
         }
