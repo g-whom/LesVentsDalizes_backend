@@ -1,5 +1,6 @@
 package fr.eql.ai113.LesVentsDalizes.controller.rest;
 
+import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
 import fr.eql.ai113.LesVentsDalizes.service.RegistrationService;
 import org.slf4j.Logger;
@@ -56,26 +57,40 @@ public class RegistrationRestController  {
 
         Set<ConstraintViolation<Customer>> violations = validator1.validate(customer);
 
-        if (violations.isEmpty()){
-            logger.info("pas de violation detectée");
-            if (customer != null){
-                logger.info("succes pour la création d'un nouveau Client");
-                customer.setSubscriptionDate(LocalDate.now());
-                return ResponseEntity.ok(registrationService.createCustomerAccount(customer));
-            }
-            logger.info("creation du nouveau client échouée");
-            return ResponseEntity.badRequest().body("La création du client à échouée");
 
-        }else{
+        //WIP : champs du client | After traiter champs de l'adresse ?!
+        if (!violations.isEmpty()) {
             logger.info("au moins 1 violation detectée");
             //liste des violations trouvées
             List<String> erros = new ArrayList<>();
-            for(ConstraintViolation<Customer> violation : violations){
-                String errorMessage = violation.getPropertyPath()+ ": "+violation.getMessage();
+            for (ConstraintViolation<Customer> violation : violations) {
+                String errorMessage = violation.getPropertyPath() + ": " + violation.getMessage();
                 erros.add(errorMessage);
             }
-        return ResponseEntity.badRequest().body(erros);
+            return ResponseEntity.badRequest().body(erros);
         }
+
+        if(customer == null) {
+            logger.info("La creation du nouveau client ne peut aboutir 'probleme de données' ");
+            return ResponseEntity.badRequest().body("La creation du nouveau client ne peut aboutir 'probleme de données' ");
+        }
+
+        logger.info("Information du futur client semble ok "+customer.getAddress().toString());
+
+        Address addressWIP = customer.getAddress();
+
+        if (registrationService.checkIfAddressAlreadyUsed(addressWIP)!=null){
+            addressWIP = registrationService.checkIfAddressAlreadyUsed(addressWIP);
+
+        }
+        Address addressCustomerValidate = registrationService.createAddresseCustomer(addressWIP);
+
+        logger.info("VERIFION =>>>>>>>>>>>>>>>>> : "+addressCustomerValidate.toString());
+        customer.setAddresse(addressCustomerValidate);
+        customer.setSubscriptionDate(LocalDate.now());
+
+        logger.info("SHOW THE CUSTOMER INFO :: \r\n"+ customer.toString());
+        return ResponseEntity.ok(registrationService.createCustomerAccount(customer));
 
     }
 

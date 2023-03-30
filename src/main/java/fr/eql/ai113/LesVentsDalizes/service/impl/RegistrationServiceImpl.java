@@ -1,18 +1,21 @@
 package fr.eql.ai113.LesVentsDalizes.service.impl;
 
+import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
+import fr.eql.ai113.LesVentsDalizes.repository.AddressDao;
 import fr.eql.ai113.LesVentsDalizes.repository.CustomerDao;
 import fr.eql.ai113.LesVentsDalizes.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.xml.validation.Validator;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
 
     //injecté par le setter
     private CustomerDao customerDao;
+
+    //injecté par le setter
+    private AddressDao addressDao;
 
     @Override
     public Customer checkIfLoginAvailable(String email) {
@@ -24,9 +27,34 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public Customer createCustomerAccount(Customer customer) {
-        //return null;
         return customerDao.save(customer);
     }
+
+    @Override
+    public Address createAddresseCustomer(Address address) {
+
+        return addressDao.save(address);
+    }
+
+//    @Override
+//    public Address checkIfAddressAlreadyUsed(Address address) {
+//        //EN COURS
+//        return addressDao.findPostalAddress(address);
+//    }
+
+    @Override
+    public Address checkIfAddressAlreadyUsed(Address address) {
+        //EN COURS
+        return addressDao.findAddressByNumberRoadAndRoadAndCityAndCountryAndZipCode(
+                address.getNumberRoad(),
+                address.getRoad(),
+                address.getCity(),
+                address.getCountry(),
+                address.getZipCode());
+    }
+
+
+
 
     @Override
     public Customer findCustomerById(int id) {
@@ -40,5 +68,8 @@ public class RegistrationServiceImpl implements RegistrationService {
         this.customerDao = customerDao;
     }
 
-
+    @Autowired
+    public void setAddresseDao(AddressDao addressDao) {
+        this.addressDao = addressDao;
+    }
 }

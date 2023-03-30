@@ -40,6 +40,7 @@ public class Customer {
     @Column(name = "email")
     private String email;
 
+
     @Column(name = "password")
     private String password;
 
@@ -51,6 +52,14 @@ public class Customer {
 
     @Column(name = "account_closing_date")
     private LocalDate accountClosingDate;
+
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "addresse_id")
+//    @ElementCollection(targetClass = Addresse.class, fetch = FetchType.EAGER)
+
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "id")
+    private Address address;
 
     /// CONSTRUCTOR ///
 
@@ -71,14 +80,34 @@ public class Customer {
      * @param phoneNumber
      * @param accountClosingDate
      */
-    public Customer(String name, String surname, LocalDate birthdate, String email, String password, String phoneNumber, LocalDate accountClosingDate) {
+//    public Customer(String name, String surname, LocalDate birthdate, String email, String password, String phoneNumber, LocalDate accountClosingDate) {
+//        this.name = name;
+//        this.surname = surname;
+//        this.birthdate = birthdate;
+//        this.email = email;
+//        this.password = password;
+//        this.phoneNumber = phoneNumber;
+//        this.accountClosingDate = accountClosingDate;
+//    }
+
+    public Customer(Integer id, String name, String surname, LocalDate birthdate, LocalDate subscriptionDate, String email, String password, String phoneNumber, LocalDate accountClosingDate, Address address) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.birthdate = birthdate;
+        this.subscriptionDate = subscriptionDate;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.accountClosingDate = accountClosingDate;
+//        Addresse addresse1 = new Addresse(addresse.getId(),
+//                addresse.getNumberRoad(), addresse.getRoad(),
+//                addresse.getZipCode(), addresse.getCity(), addresse.getCountry());
+        this.address = address;//addresse1;
+
+
+
+
     }
 
     /// FUNCTIONS ///
@@ -121,6 +150,9 @@ public class Customer {
         return accountClosingDate;
     }
 
+    public Address getAddress() {
+        return address;
+    }
 
     /// SETTERS ///
 
@@ -160,6 +192,9 @@ public class Customer {
         this.accountClosingDate = accountClosingDate;
     }
 
+    public void setAddresse(Address address) {
+        this.address = address;
+    }
 
     /// HASHCODE ///
 
@@ -168,4 +203,19 @@ public class Customer {
     /// TOSTRING ///
 
 
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", birthdate=" + birthdate +
+                ", subscriptionDate=" + subscriptionDate +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", accountClosingDate=" + accountClosingDate +
+                ", addresse=" + address.toString() +
+                '}';
+    }
 }

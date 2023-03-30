@@ -1,7 +1,7 @@
 package fr.eql.ai113.LesVentsDalizes.entity.dto;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import fr.eql.ai113.LesVentsDalizes.entity.Address;
+
 import java.time.LocalDate;
 /**
  * This class represents a customer in the customer management system
@@ -26,6 +26,9 @@ public class CustomerDto {
         private String phoneNumber;
 
         private LocalDate accountClosingDate;
+
+
+        private Address address;
 
         /// CONSTRUCTOR ///
 
@@ -95,6 +98,9 @@ public class CustomerDto {
         return accountClosingDate;
     }
 
+    public Address getAddresse() {
+        return address;
+    }
 
     /// SETTERS ///
 
@@ -134,6 +140,9 @@ public class CustomerDto {
         this.accountClosingDate = accountClosingDate;
     }
 
+    public void setAddresse(Address address) {
+        this.address = address;
+    }
 
     /// HASHCODE ///
 
