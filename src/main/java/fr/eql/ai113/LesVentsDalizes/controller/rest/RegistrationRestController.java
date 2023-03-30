@@ -52,6 +52,10 @@ public class RegistrationRestController  {
     @PostMapping("/customer/new")
     public ResponseEntity< ? > createCustomerAccount(@RequestBody Customer customer)  {
 
+        if (registrationService.checkIfLoginAvailable(customer.getEmail() )!=null ){
+            return ResponseEntity.badRequest().body("il semblerait que ce compte soit déjà dans notre systeme");
+        }
+
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator1 = factory.getValidator();
 

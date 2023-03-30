@@ -21,10 +21,16 @@ public class Address {
     @NotEmpty(message = "la voie doit etre renseignée")
     @Column(name = "road")
     private String road;
+    @NotNull(message = "Le code postal doit etre renseigné")
+    @NotEmpty(message = "Le code postal doit etre renseign")
     @Column(name = "zip_code")
     private String zipCode;
+    @NotNull(message = "La ville doit etre renseignée")
+    @NotEmpty(message = "la vilee doit etre renseignée")
     @Column(name = "city")
     private String city;
+    @NotNull(message = "Le pays doit etre renseigné")
+    @NotEmpty(message = "la pays doit etre renseignée")
     @Column(name = "country")
     private String country;
 
