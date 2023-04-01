@@ -11,13 +11,14 @@ import java.time.LocalDate;
  * This class represents a customer in the customer management system
  */
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "customers")
 //@Inheritance(strategy = InheritanceType.JOINED)
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @NotNull(message = "le nom doit etre renseigné")
     @NotEmpty(message = "le nom doit etre renseigné")
@@ -61,6 +62,7 @@ public class Customer {
     @JoinColumn(referencedColumnName = "id")
     private Address address;
 
+
     /// CONSTRUCTOR ///
 
 
@@ -90,7 +92,7 @@ public class Customer {
 //        this.accountClosingDate = accountClosingDate;
 //    }
 
-    public Customer(Integer id, String name, String surname, LocalDate birthdate, LocalDate subscriptionDate, String email, String password, String phoneNumber, LocalDate accountClosingDate, Address address) {
+    public Customer(Long id, String name, String surname, LocalDate birthdate, LocalDate subscriptionDate, String email, String password, String phoneNumber, LocalDate accountClosingDate, Address address) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -114,7 +116,7 @@ public class Customer {
 
     /// GETTERS ///:
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -156,7 +158,7 @@ public class Customer {
 
     /// SETTERS ///
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

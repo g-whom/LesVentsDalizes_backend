@@ -6,7 +6,9 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+/**
+ * this class represents the addresses of each customer registered in the system
+ */
 @Entity
 @Table(name = "addresses")
 public class Address {
@@ -30,9 +32,10 @@ public class Address {
     @Column(name = "city")
     private String city;
     @NotNull(message = "Le pays doit etre renseigné")
-    @NotEmpty(message = "la pays doit etre renseignée")
+    @NotEmpty(message = "la pays doit etre renseigné")
     @Column(name = "country")
     private String country;
+
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
     private List<Customer> customerList = new ArrayList<>();

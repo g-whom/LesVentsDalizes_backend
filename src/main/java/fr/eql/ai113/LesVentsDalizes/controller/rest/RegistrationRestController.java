@@ -2,6 +2,7 @@ package fr.eql.ai113.LesVentsDalizes.controller.rest;
 
 import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
+import fr.eql.ai113.LesVentsDalizes.entity.Member;
 import fr.eql.ai113.LesVentsDalizes.service.RegistrationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,16 @@ public class RegistrationRestController  {
     @GetMapping("/{email}")
     public Customer checkIfLoginAvailable(@PathVariable String email) {
         return registrationService.checkIfLoginAvailable(email) ;
+    }
+
+    @PostMapping("/member/new")
+    public Member createMemberAccount(@RequestBody Member member){
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ");
+        System.out.println(member.getName());
+        System.out.println(member.getAddress().toString());
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ");
+        return registrationService.registerNewMember(member);
+
     }
 
     /**
