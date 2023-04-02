@@ -17,7 +17,7 @@ import java.time.LocalDate;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull(message = "le nom doit etre renseigné")
@@ -62,6 +62,20 @@ public class Customer {
     @JoinColumn(referencedColumnName = "id")
     private Address address;
 
+
+    //--[WIP]------------CLASS >> --- Links
+
+    //[WIP] Demande : RequestPerfom
+    // - [link - classes]
+    // - [java]
+    // - [bdd]
+    // - [insertion data -> import.sql]
+    // - [insertion data -> import.java]
+    // - [insertion data -> import.Postman]
+    //
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "request_perform_id", referencedColumnName = "id")
+    private RequestPerform requestPerform;
 
     /// CONSTRUCTOR ///
 

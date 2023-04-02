@@ -1,15 +1,14 @@
 package fr.eql.ai113.LesVentsDalizes.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "request_perform")
 public class RequestPerform {
 
     @Id
-    @Column(name = "request_perform_id")
+    //@Column(name = "request_perform_id")
     private Long id;
 
 
@@ -23,8 +22,28 @@ public class RequestPerform {
     LocalDate startTime;
     LocalDate duration;
 
-    @Column(name = "description-request")
+
+    @Column(name = "description_request")
     String descriptionRequest;
+
+    //--[WIP]------------CLASS >> --- Links
+
+    //WIP: Status_demande_prestation: StatusRequestPerfom
+    // [ok] import.sql
+    // [] link-up
+    @Enumerated(EnumType.STRING)
+    private StatusRequestPerform statusRequestPerform;
+
+    //WIP: Evenement : Event
+    // [ok] import.sql
+    // [] link-up
+
+
+    //WIP: Client : Customer
+    @OneToOne(mappedBy = "requestPerform")
+    private Customer customer;
+    // [ok] class
+    // [] link-up
 
 
 
