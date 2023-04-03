@@ -6,6 +6,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents a customer in the customer management system
@@ -73,9 +75,12 @@ public class Customer {
     // - [insertion data -> import.java]
     // - [insertion data -> import.Postman]
     //
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "request_perform_id", referencedColumnName = "id")
-    private RequestPerform requestPerform;
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "request_perform_id", referencedColumnName = "id")
+//    private RequestPerform requestPerform;
+    //V2
+    @OneToMany(mappedBy = "customer")
+    private List<RequestPerform> requestPerformList = new ArrayList<>();
 
     /// CONSTRUCTOR ///
 
