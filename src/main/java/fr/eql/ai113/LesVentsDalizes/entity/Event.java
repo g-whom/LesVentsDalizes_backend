@@ -34,7 +34,42 @@ public class Event {
     /// CONSTRUCTOR ///
     /// METHODES ///
     /// GETTERS ///
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
     /// SETTERS ///
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
     /// TO_STRING ///
 
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
+                ", available=" + available +
+                '}';
+    }
 }
