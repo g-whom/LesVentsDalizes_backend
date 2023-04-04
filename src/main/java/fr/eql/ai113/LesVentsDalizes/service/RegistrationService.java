@@ -21,8 +21,7 @@ public interface RegistrationService {
 
    Address checkIfAddressAlreadyUsed(Address address);
 
-    Customer findCustomerById(int id);
-
+    Customer findCustomerById(Long id);
 
 
 }

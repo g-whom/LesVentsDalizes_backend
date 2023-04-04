@@ -7,7 +7,6 @@ import fr.eql.ai113.LesVentsDalizes.repository.AddressDao;
 import fr.eql.ai113.LesVentsDalizes.repository.CustomerDao;
 import fr.eql.ai113.LesVentsDalizes.repository.MemberDao;
 import fr.eql.ai113.LesVentsDalizes.service.RegistrationService;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -106,7 +105,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 
     @Override
-    public Customer findCustomerById(int id) {
+    public Customer findCustomerById(Long id) {
         return customerDao.findCustomerById(id);
     }
 

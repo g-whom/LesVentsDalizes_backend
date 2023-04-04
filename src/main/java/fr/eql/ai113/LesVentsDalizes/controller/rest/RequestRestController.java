@@ -22,7 +22,7 @@ public class RequestRestController {
 
 
     @PostMapping("member/new")
-    RequestPerform processOfCreationOfRequestOfPerform(@RequestBody RequestPerform requestPerform){
+    public RequestPerform processOfCreationOfRequestOfPerform(@RequestBody RequestPerform requestPerform){
 
 
         logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>\r\t>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -30,36 +30,37 @@ public class RequestRestController {
         //a tester dans Postman : http://localhost:8097/request/member/new
         //json
        /*
+
         {
-            "id":"4",
+            "id":"1",
                 "dateCreationRequest": "2023-04-03",
                 "datePerformRequested": "2023-06-09",
                 "startTime": "09:30:45",
                 "endTime": "12:30:45",
-                "descriptionRequest": "Ce n'est qu'une tentative..",
-                "StatusRequestPerform":{
-                     "id":"4",
+                "descriptionRequest": "Ce n'est qu'une tentative. yoyoyoyoyo .",
+                "statusRequestPerform":{
+                     "id":"1",
                     "label": "en phase de test man",
                     "available": true
                 },
                 "event":{
-                    "id":"4",
+                    "id":"2",
                     "label": "mariage",
                     "available": true
         },
             "customer":
             {
-                "id": 4776777,
+                "id": 1,
                     "name": "jeje",
                     "surname" : "whum",
                     "birthdate" : "1987-12-03",
                     "subscriptionDate" : null,
-                    "email" : "jeje@whum.com",
+                    "email" : "jejeh@whum.com",
                     "password" : "caporal",
                     "phoneNumber" :"07234(é",
                     "accountClosingDate" : null,
                     "address" :{
-                "id":"23",
+                "id":"1",
                         "numberRoad": "94",
                         "road":"cJoisy ",
                         "zipCode":"94413",
@@ -73,8 +74,13 @@ public class RequestRestController {
                     "annualFeesList":null
             }
         }
+
         */
-        return requestManagmentService.applyingForPerformance(requestPerform);
+
+        RequestPerform rP = requestManagmentService.applyingForPerformance(requestPerform);
+        logger.info("controle");
+        logger.info(rP.toString());
+        return rP;
     }
 
 

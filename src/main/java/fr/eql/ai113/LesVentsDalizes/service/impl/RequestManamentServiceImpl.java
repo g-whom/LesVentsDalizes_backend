@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
+
 @Service
 public class RequestManamentServiceImpl implements RequestManagmentService {
 
@@ -41,6 +43,23 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
         logger.info("Le CLIENT : \t\n");
         logger.info(whoIsHe.toString());
         logger.info("\t\n");
+
+        logger.info("Le CLIENT recuperé : \t\n");
+        logger.info("l'id : "+requestPerform.getCustomer().getId());
+        //Customer getIt =customerDao.findCustomerById(requestPerform.getCustomer().getId());
+
+        //Customer cus ;
+        Optional<Customer> getIt = customerDao.findById(1L);
+
+        if (getIt.isPresent()) {
+        //cus = getIt.get();
+        logger.info("WWWWWWWWWWWWWw\t\n ! "+ getIt.get().toString());
+        }
+
+        //
+
+//        logger.info(getIt.getName());
+//        requestPerform.setCustomer(getIt);
 
 
 

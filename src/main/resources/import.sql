@@ -34,8 +34,8 @@
  INSERT INTO `addresses` (`id`, `number_road`,`road`,`zip_code`,`city`,`country`)  VALUES ('1','24','rue de monopoly','92300','Monrouges','FRANCE');
 
 -- customer pour tester au moins une demande
- INSERT INTO `customers` (`id`, `name`, `surname`,`birthdate`,`subscription_date`,`email`,`password`,`phone_number`, `account_closing_date`, `address_id` ) VALUES ('1','jeje','rom','1987-12-03',null, 'jeje@whum.com','none', '0607',null, '1');
- --INSERT INTO `customers` (`id`, `name`, `surname`,`birthdate`,`subscription_date`,`email`,`password`,`phone_number`, `account_closing_date`- ) VALUES ('1','jeje','rom','1987-12-03',null, 'jeje@whum.com','none', '0607',null);
+ INSERT INTO `customers` (`id`, `name`, `surname`,`birthdate`,`subscription_date`,`email`,`password`,`phone_number`, `account_closing_date`, `address_id`, `dtype` ) VALUES ('1','jeje','rom','1987-12-03',NULL, 'jeje@whum.com','none', '0607',NULL, '1', 'Customer');
+ --INSERT INTO `customers` (`id`, `name`, `surname`,`birthdate`,`subscription_date`,`email`,`password`,`phone_number`, `account_closing_date`- ) VALUES ('1','jeje','rom',NOW(),null, 'jeje@whum.com','none', '0607',null);
 
 
 

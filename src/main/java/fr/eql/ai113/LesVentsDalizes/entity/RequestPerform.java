@@ -97,29 +97,7 @@ public class RequestPerform {
     /// GETTERS ///
 
 
-    public Long getId() {
-        return id;
-    }
 
-    public LocalDate getDateCreationRequest() {
-        return dateCreationRequest;
-    }
-
-    public LocalDate getDatePerformRequested() {
-        return datePerformRequested;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public String getDescriptionRequest() {
-        return descriptionRequest;
-    }
 
     public StatusRequestPerform getStatusRequestPerform() {
         return statusRequestPerform;
@@ -183,9 +161,9 @@ public class RequestPerform {
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", descriptionRequest='" + descriptionRequest + '\'' +
-                ", statusRequestPerform=" + statusRequestPerform.toString() +
-                ", event=" + event.toString() +
-                ", customer=" + customer.toString() +
+                ", statusRequestPerform=" + statusRequestPerform +
+                ", event=" + event+
+                ", customer=" + customer +
                 '}';
     }
 }

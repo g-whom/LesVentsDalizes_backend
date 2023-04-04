@@ -35,7 +35,7 @@ public class RegistrationRestController  {
     Validator validator;
 
     @GetMapping("/customer/{id}")
-    public Customer retrieveCustomerById(@PathVariable int id){
+    public Customer retrieveCustomerById(@PathVariable Long id){
         return registrationService.findCustomerById(id);
     }
 
