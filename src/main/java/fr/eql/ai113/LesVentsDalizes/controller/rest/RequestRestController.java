@@ -78,17 +78,18 @@ public class RequestRestController {
         }
 
         */
-        RequestPerform rP = null;
+        RequestPerform requestPerformChecked = null;
         try {
-             rP = requestManagmentService.applyingForPerformance(requestPerform);
+            requestPerformChecked = requestManagmentService.applyingForPerformance(requestPerform);
             logger.info("controle");
-            logger.info(rP.toString());
+            logger.info(requestPerformChecked.toString());
         }catch(NonExistentCustomerException e){
            // return ResponseEntity.badRequest().body(e);
-            return ResponseEntity.badRequest().body(""+e);
+            logger.info("La demande de prestation à échouée car "+e);
+            return ResponseEntity.badRequest().body("La demande de prestation à échouée car "+e.getMessage());
         }
 
-        return ResponseEntity.ok(rP);
+        return ResponseEntity.ok(requestPerformChecked);
     }
 
 
