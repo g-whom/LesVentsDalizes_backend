@@ -3,12 +3,17 @@ package fr.eql.ai113.LesVentsDalizes.service.impl;
 import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
 import fr.eql.ai113.LesVentsDalizes.entity.Member;
+import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
 import fr.eql.ai113.LesVentsDalizes.repository.AddressDao;
 import fr.eql.ai113.LesVentsDalizes.repository.CustomerDao;
 import fr.eql.ai113.LesVentsDalizes.repository.MemberDao;
 import fr.eql.ai113.LesVentsDalizes.service.RegistrationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -21,6 +26,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     //injeté par le setter
     private MemberDao memberDao;
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public Customer checkIfLoginAvailable(String email) {
@@ -108,6 +115,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     public Customer findCustomerById(Long id) {
         return customerDao.findCustomerById(id);
     }
+
+
+
 
 
     /// SETTER ///

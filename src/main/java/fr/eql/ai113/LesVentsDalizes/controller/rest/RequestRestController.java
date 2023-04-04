@@ -1,10 +1,12 @@
 package fr.eql.ai113.LesVentsDalizes.controller.rest;
 
 import fr.eql.ai113.LesVentsDalizes.entity.RequestPerform;
+import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
 import fr.eql.ai113.LesVentsDalizes.service.RequestManagmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,7 @@ public class RequestRestController {
 
 
     @PostMapping("member/new")
-    public RequestPerform processOfCreationOfRequestOfPerform(@RequestBody RequestPerform requestPerform){
+    public ResponseEntity< ? > processOfCreationOfRequestOfPerform(@RequestBody RequestPerform requestPerform)  {
 
 
         logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>\r\t>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -76,11 +78,17 @@ public class RequestRestController {
         }
 
         */
+        RequestPerform rP = null;
+        try {
+             rP = requestManagmentService.applyingForPerformance(requestPerform);
+            logger.info("controle");
+            logger.info(rP.toString());
+        }catch(NonExistentCustomerException e){
+           // return ResponseEntity.badRequest().body(e);
+            return ResponseEntity.badRequest().body(""+e);
+        }
 
-        RequestPerform rP = requestManagmentService.applyingForPerformance(requestPerform);
-        logger.info("controle");
-        logger.info(rP.toString());
-        return rP;
+        return ResponseEntity.ok(rP);
     }
 
 
