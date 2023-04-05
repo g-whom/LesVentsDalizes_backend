@@ -2,6 +2,7 @@ package fr.eql.ai113.LesVentsDalizes.controller.rest;
 
 import fr.eql.ai113.LesVentsDalizes.entity.RequestPerform;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
+import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentEventException;
 import fr.eql.ai113.LesVentsDalizes.service.RequestManagmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +88,11 @@ public class RequestRestController {
            // return ResponseEntity.badRequest().body(e);
             logger.info("La demande de prestation à échouée car "+e);
             return ResponseEntity.badRequest().body("La demande de prestation à échouée car "+e.getMessage());
+        }catch(NonExistentEventException e){
+            logger.info("La demande de prestation à échouée car "+e);
+            return  ResponseEntity.badRequest().body("LA demande de prestatiion à échouée car "+e.getMessage());
         }
+
 
         return ResponseEntity.ok(requestPerformChecked);
     }

@@ -5,7 +5,9 @@ import fr.eql.ai113.LesVentsDalizes.entity.Event;
 import fr.eql.ai113.LesVentsDalizes.entity.RequestPerform;
 import fr.eql.ai113.LesVentsDalizes.entity.StatusRequestPerform;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
+import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentEventException;
 import fr.eql.ai113.LesVentsDalizes.repository.CustomerDao;
+import fr.eql.ai113.LesVentsDalizes.repository.EventDao;
 import fr.eql.ai113.LesVentsDalizes.repository.RequestPerformDao;
 import fr.eql.ai113.LesVentsDalizes.service.RequestManagmentService;
 
@@ -29,6 +31,8 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
     private RequestPerformDao requestPerformDao;
     private CustomerDao customerDao;
 
+    private EventDao eventDao;
+
 
 
     //Retrouver un client
@@ -42,7 +46,7 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
     soit  on part du principe que seul l
      */
     @Override
-    public RequestPerform applyingForPerformance(RequestPerform requestPerform) throws NonExistentCustomerException  {
+    public RequestPerform applyingForPerformance(RequestPerform requestPerform) throws NonExistentCustomerException , NonExistentEventException  {
 
         //controle des données connexes
         //Customer
@@ -84,11 +88,17 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
         logger.info(status.toString());
         logger.info("\t\n");
 
+
+
+
         //Event ->
         Event event = requestPerform.getEvent();
         logger.info("L'EVENEMENT : \t\n");
         logger.info(event.toString());
         logger.info("\t\n");
+        logger.info("L'EVENEMENT : \t\n");
+        Event eventChecked = retrieveEventById(requestPerform.getEvent().getId());
+        requestPerform.setEvent(eventChecked);
 
 
         // on part du principe ou tous les champs sont renseigné !!
@@ -104,7 +114,7 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
     /**
      * This method searches for the client by his id
      * @param id : is the identifier of the client in the database
-     * @return Customer
+     * @return Customer found
      * @throws NonExistentCustomerException
      */
     public Customer retrieveCustomerById(Long id) throws NonExistentCustomerException{
@@ -114,13 +124,34 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
 
         if(!customerToCheck.isPresent()){
 
-            logger.info("L'assuré ayant l'id :"+ id + " n'est pas présent");
-            throw new NonExistentCustomerException("Client numéro : "+id+" inésistant");
+            logger.info("L'assuré ayant l'id :"+ id + " n'est pas présent en bas de données");
+            throw new NonExistentCustomerException("Client numéro : "+id+" est inésistant");
         }
         customerFound =customerToCheck.get();
 
         return customerFound;
 
+    }
+
+    /**
+     * this method this method searches the event by its id
+     * @param id : is the identifier of the event in the database
+     * @return Event found
+     * @throws NonExistentEventException p
+     */
+    @Override
+
+    public Event retrieveEventById(Long id) throws NonExistentEventException{
+
+        Event eventFound = null;
+        Optional<Event> eventToCheck = eventDao.findById(id);
+
+        if(!eventToCheck.isPresent()){
+            logger.info("L'évènement ayant l'id : "+id+" n'est pas présent en base de données");
+            throw new NonExistentEventException("Evènement numéro : "+id+" est inexistant");
+        }
+        eventFound = eventToCheck.get();
+        return eventFound;
     }
 
 
@@ -134,5 +165,10 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
     @Autowired
     public void setCustomerDao(CustomerDao customerDao) {
         this.customerDao = customerDao;
+    }
+
+    @Autowired
+    public void setEventDao(EventDao eventDao) {
+        this.eventDao = eventDao;
     }
 }
