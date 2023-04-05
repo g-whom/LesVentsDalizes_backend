@@ -1,8 +1,7 @@
 package fr.eql.ai113.LesVentsDalizes.entity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * This class reprents the type of events for wich q performance request would be associated

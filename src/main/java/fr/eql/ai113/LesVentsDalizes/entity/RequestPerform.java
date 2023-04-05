@@ -50,6 +50,12 @@ public class RequestPerform {
     private Event event;
 
 
+    //WIP STATUS
+    @OneToOne(cascade =  CascadeType.ALL)
+    @JoinColumn(name = "status_perform_d", referencedColumnName = "id")
+    private StatusPerform statusPerform;
+
+
     //WIP: Client : Customer
 //    @ManyToOne(mappedBy = "requestPerform")0
 //    private Customer customer;

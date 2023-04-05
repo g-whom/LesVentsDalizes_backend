@@ -6,9 +6,11 @@ import fr.eql.ai113.LesVentsDalizes.entity.RequestPerform;
 import fr.eql.ai113.LesVentsDalizes.entity.StatusRequestPerform;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentEventException;
+import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentStatusPerformException;
 import fr.eql.ai113.LesVentsDalizes.repository.CustomerDao;
 import fr.eql.ai113.LesVentsDalizes.repository.EventDao;
 import fr.eql.ai113.LesVentsDalizes.repository.RequestPerformDao;
+import fr.eql.ai113.LesVentsDalizes.repository.StatusRequestPerformDao;
 import fr.eql.ai113.LesVentsDalizes.service.RequestManagmentService;
 
 import org.slf4j.Logger;
@@ -30,8 +32,9 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
     //injecté par le setter
     private RequestPerformDao requestPerformDao;
     private CustomerDao customerDao;
-
     private EventDao eventDao;
+
+    private StatusRequestPerformDao statusRequestPerformDao;
 
 
 
@@ -46,63 +49,28 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
     soit  on part du principe que seul l
      */
     @Override
-    public RequestPerform applyingForPerformance(RequestPerform requestPerform) throws NonExistentCustomerException , NonExistentEventException  {
+    public RequestPerform applyingForPerformance(RequestPerform requestPerform)
+            throws NonExistentCustomerException ,
+            NonExistentEventException,
+            NonExistentStatusPerformException {
 
-        //controle des données connexes
-        //Customer
-        Customer whoIsHe = requestPerform.getCustomer();
-        logger.info("Le CLIENT : \t\n");
-        logger.info(whoIsHe.toString());
-        logger.info("\t\n");
-
-        //verifier le client
-        logger.info("Le CLIENT  verifié: \t\n");
         Customer customerChecked = retrieveCustomerById(requestPerform.getCustomer().getId());
-        logger.info(customerChecked.toString());
+        logger.info("Le CLIENT  verifié: \t\n"+customerChecked.toString());
         requestPerform.setCustomer(customerChecked);
 
+        StatusRequestPerform statusRequestPerformChecked = retrieveStatusRequestPerformByID(requestPerform.getStatusRequestPerform().getId());
+        logger.info("Le statut  vérifié de la demande : \t\n"+statusRequestPerformChecked.toString());
+        requestPerform.setStatusRequestPerform(statusRequestPerformChecked);
 
-
-        logger.info("Le CLIENT recuperé : \t\n");
-        logger.info("l'id : "+requestPerform.getCustomer().getId());
-        //Customer getIt =customerDao.findCustomerById(requestPerform.getCustomer().getId());
-
-        //Customer cus ;
-        Optional<Customer> getIt = customerDao.findById(1L);
-
-        if (getIt.isPresent()) {
-        //cus = getIt.get();
-        logger.info("WWWWWWWWWWWWWw\t\n ! "+ getIt.get().toString());
-        }
-
-        //
-
-//        logger.info(getIt.getName());
-//        requestPerform.setCustomer(getIt);
-
-
-
-        //Statut
-        StatusRequestPerform status = requestPerform.getStatusRequestPerform();
-        logger.info("LE STATUT : \t\n");
-        logger.info(status.toString());
-        logger.info("\t\n");
-
-
-
-
-        //Event ->
-        Event event = requestPerform.getEvent();
-        logger.info("L'EVENEMENT : \t\n");
-        logger.info(event.toString());
-        logger.info("\t\n");
-        logger.info("L'EVENEMENT : \t\n");
         Event eventChecked = retrieveEventById(requestPerform.getEvent().getId());
+        logger.info("L'EVENEMENT vérifié : \t\n"+eventChecked.toString());
         requestPerform.setEvent(eventChecked);
 
 
         // on part du principe ou tous les champs sont renseigné !!
         logger.info("Toutes les information de la demande : \t\n");
+
+        //WIP : Vérififation de l'enregistrement en base de données
         logger.info(requestPerform.toString());
 
         //sauvegarde sans controle
@@ -134,10 +102,10 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
     }
 
     /**
-     * this method this method searches the event by its id
+     *  This method searches the event by its id
      * @param id : is the identifier of the event in the database
      * @return Event found
-     * @throws NonExistentEventException p
+     * @throws NonExistentEventException
      */
     @Override
 
@@ -152,6 +120,26 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
         }
         eventFound = eventToCheck.get();
         return eventFound;
+    }
+
+    /**
+     * tThis method searches the status of the request by its id
+     * @param id :  is the identifier of the status of request in the database
+     * @return status of resquest perfom
+     * @throws NonExistentStatusPerformException
+     */
+    @Override
+    public StatusRequestPerform retrieveStatusRequestPerformByID(Long id) throws NonExistentStatusPerformException {
+
+        StatusRequestPerform statusRequestPerformFound = null;
+        Optional<StatusRequestPerform> statusRequestPerformToCheck = statusRequestPerformDao.findById(id);
+
+        if(!statusRequestPerformToCheck.isPresent()){
+            logger.info("Le status de la demande ayant l'id : "+id+" n'est pas présent en base de données");
+            throw new NonExistentStatusPerformException("Le statut numéro : "+id+" est inexistant");
+        }
+        statusRequestPerformFound = statusRequestPerformToCheck.get();
+        return statusRequestPerformFound;
     }
 
 
@@ -170,5 +158,10 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
     @Autowired
     public void setEventDao(EventDao eventDao) {
         this.eventDao = eventDao;
+    }
+
+    @Autowired
+    public void setStatusRequestPerformDao(StatusRequestPerformDao statusRequestPerformDao) {
+        this.statusRequestPerformDao = statusRequestPerformDao;
     }
 }
