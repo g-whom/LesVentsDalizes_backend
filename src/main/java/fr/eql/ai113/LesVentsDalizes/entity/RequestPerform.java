@@ -98,6 +98,17 @@ public class RequestPerform {
         this.event = event;
         this.customer = customer;
     }
+    public RequestPerform( LocalDate dateCreationRequest, LocalDate datePerformRequested, LocalTime startTime, LocalTime endTime, String descriptionRequest, StatusRequestPerform statusRequestPerform, Event event, Customer customer) {
+
+        this.dateCreationRequest = dateCreationRequest;
+        this.datePerformRequested = datePerformRequested;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.descriptionRequest = descriptionRequest;
+        this.statusRequestPerform = statusRequestPerform;
+        this.event = event;
+        this.customer = customer;
+    }
 
     /// METHODES ///
     /// GETTERS ///

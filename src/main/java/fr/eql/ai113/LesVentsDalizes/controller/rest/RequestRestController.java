@@ -4,6 +4,7 @@ import fr.eql.ai113.LesVentsDalizes.entity.RequestPerform;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentEventException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentStatusPerformException;
+import fr.eql.ai113.LesVentsDalizes.exceptions.RequestPerformRegistrationFailedException;
 import fr.eql.ai113.LesVentsDalizes.service.RequestManagmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,20 +84,21 @@ public class RequestRestController {
         RequestPerform requestPerformChecked = null;
         try {
             requestPerformChecked = requestManagmentService.applyingForPerformance(requestPerform);
-            logger.info("controle");
-            logger.info(requestPerformChecked.toString());
+            logger.info("controle\t\r\n"+requestPerformChecked.toString());
         }catch(NonExistentCustomerException e){
            // return ResponseEntity.badRequest().body(e);
             logger.info("La demande de prestation à échouée car "+e);
-            return ResponseEntity.badRequest().body("La demande de prestation à échouée car "+e.getMessage());
+            return ResponseEntity.badRequest().body(""+e.getMessage());
         }catch(NonExistentEventException e){
             logger.info("La demande de prestation à échouée car "+e);
-            return  ResponseEntity.badRequest().body("La demande de prestatiion à échouée car "+e.getMessage());
+            return  ResponseEntity.badRequest().body(""+e.getMessage());
         }catch(NonExistentStatusPerformException e){
             logger.info("La demade de prestatuon à échoué car "+e);
-            return  ResponseEntity.badRequest().body("Le demande de prestation à échouée car "+e.getMessage());
+            return  ResponseEntity.badRequest().body(""+e.getMessage());
+        }catch(RequestPerformRegistrationFailedException e){
+            logger.info("La demade de prestatuon à échoué car "+e);
+            return ResponseEntity.badRequest().body("La demade de prestatuon n'a pu aboutir.. "+e.getMessage());
         }
-
 
         return ResponseEntity.ok(requestPerformChecked);
     }

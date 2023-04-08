@@ -4,13 +4,15 @@ import fr.eql.ai113.LesVentsDalizes.entity.*;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentEventException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentStatusPerformException;
+import fr.eql.ai113.LesVentsDalizes.exceptions.RequestPerformRegistrationFailedException;
 
 public interface RequestManagmentService {
 
     RequestPerform applyingForPerformance(RequestPerform requestPerform)
             throws NonExistentCustomerException,
             NonExistentEventException,
-            NonExistentStatusPerformException;
+            NonExistentStatusPerformException,
+            RequestPerformRegistrationFailedException;
 
 
     Customer retrieveCustomerById(Long id) throws NonExistentCustomerException;
@@ -19,6 +21,8 @@ public interface RequestManagmentService {
 
     StatusRequestPerform retrieveStatusRequestPerformByID(Long id) throws NonExistentStatusPerformException;
 
+
+    Event feedEvents(Event event);
 
 
     }

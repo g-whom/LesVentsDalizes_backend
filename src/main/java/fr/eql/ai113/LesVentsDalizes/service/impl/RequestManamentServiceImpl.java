@@ -7,6 +7,7 @@ import fr.eql.ai113.LesVentsDalizes.entity.StatusRequestPerform;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentEventException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentStatusPerformException;
+import fr.eql.ai113.LesVentsDalizes.exceptions.RequestPerformRegistrationFailedException;
 import fr.eql.ai113.LesVentsDalizes.repository.CustomerDao;
 import fr.eql.ai113.LesVentsDalizes.repository.EventDao;
 import fr.eql.ai113.LesVentsDalizes.repository.RequestPerformDao;
@@ -33,26 +34,24 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
     private RequestPerformDao requestPerformDao;
     private CustomerDao customerDao;
     private EventDao eventDao;
-
     private StatusRequestPerformDao statusRequestPerformDao;
 
 
-
-    //Retrouver un client
-
-
-
-
-
-    //WIP en woute ...
-    /*
-    soit  on part du principe que seul l
+    /**
+     * This method represents the association's demand for performance, so this demand is associated with a customer.
+     * @param requestPerform : the request of perform
+     * @return :The registered request for service
+     * @throws NonExistentCustomerException
+     * @throws NonExistentEventException
+     * @throws NonExistentStatusPerformException
+     * @throws RequestPerformRegistrationFailedException
      */
     @Override
     public RequestPerform applyingForPerformance(RequestPerform requestPerform)
             throws NonExistentCustomerException ,
             NonExistentEventException,
-            NonExistentStatusPerformException {
+            NonExistentStatusPerformException,
+            RequestPerformRegistrationFailedException{
 
         Customer customerChecked = retrieveCustomerById(requestPerform.getCustomer().getId());
         logger.info("Le CLIENT  verifié: \t\n"+customerChecked.toString());
@@ -67,14 +66,16 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
         requestPerform.setEvent(eventChecked);
 
 
-        // on part du principe ou tous les champs sont renseigné !!
-        logger.info("Toutes les information de la demande : \t\n");
-
-        //WIP : Vérififation de l'enregistrement en base de données
-        logger.info(requestPerform.toString());
+        // WIP : Dernier controle avant la sauvegarde
 
         //sauvegarde sans controle
-        return requestPerformDao.save(requestPerform);
+        RequestPerform requestPerformRegistration = requestPerformDao.save(requestPerform);
+        if (requestPerformRegistration == null){
+            logger.info("L'enregistrement de la demande de prestation à échoué");
+            throw new RequestPerformRegistrationFailedException("L'enregistrement de la demande de prestation à échoué");
+        }
+        return requestPerformRegistration ;
+
         //return null;
     }
 
@@ -140,6 +141,28 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
         }
         statusRequestPerformFound = statusRequestPerformToCheck.get();
         return statusRequestPerformFound;
+    }
+
+    @Override
+    public Event feedEvents(Event event) {
+        Event eventFound = null;
+
+        //String eventNormalize = event.getLabel().trim().
+
+        String value = event.getLabel().trim().toString();
+
+        //
+        Optional<Event> eventToCehck = Optional.ofNullable(eventDao.findByLabel(value));
+        if (eventToCehck.isPresent()){
+            eventFound = eventToCehck.get();
+            return eventDao.save(eventFound);
+        }
+
+        //controle si c'est nul
+        //controle si deja present ?
+        //ajoute si possible
+        //retourne si deja present
+        return eventDao.save(event) ;
     }
 
 

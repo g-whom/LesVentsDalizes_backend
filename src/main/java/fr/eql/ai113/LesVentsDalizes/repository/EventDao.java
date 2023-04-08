@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface EventDao extends JpaRepository<Event, Long> {
 
     Event findById(long id);
+
+    Event findByLabel(String label);
 }
