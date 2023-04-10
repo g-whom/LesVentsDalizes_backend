@@ -16,7 +16,7 @@ public class Event {
     private String label;
 
     /**
-     * the state will be used to display or hide the item in the available list
+     * the state will be used to display or hide the item in the available list of Event
      */
     boolean available;
 

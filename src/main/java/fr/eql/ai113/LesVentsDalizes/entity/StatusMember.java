@@ -13,9 +13,18 @@ public class StatusMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
 
-    String label;
+    private String label;
+
+    private boolean available;
+
+    /// CONSTRUCTORS ///
+    /// METHODES ///
+    /// GETTERS ///
+    /// SETTERS ///
+    /// TOSTRING ///
+
 
 
 
