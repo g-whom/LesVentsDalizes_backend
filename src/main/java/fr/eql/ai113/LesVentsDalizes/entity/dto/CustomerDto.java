@@ -21,14 +21,14 @@ public class CustomerDto {
         private LocalDate subscriptionDate;
 
         private String mail;
-        private String password;
+//        private String password;
 
         private String phoneNumber;
 
         private LocalDate accountClosingDate;
 
 
-        private Address address;
+       // private Address address;
 
         /// CONSTRUCTOR ///
 
@@ -44,21 +44,46 @@ public class CustomerDto {
          * @param surname lastname of the customer
          * @param birthdate
          * @param mail
-         * @param password
+        // * @param password
          * @param phoneNumber
          * @param accountClosingDate
          */
-        public CustomerDto(String name, String surname, LocalDate birthdate, String mail, String password, String phoneNumber, LocalDate accountClosingDate) {
-            this.name = name;
-            this.surname = surname;
-            this.birthdate = birthdate;
-            this.mail = mail;
-            this.password = password;
-            this.phoneNumber = phoneNumber;
-            this.accountClosingDate = accountClosingDate;
-        }
+//        public CustomerDto(String name, String surname, LocalDate birthdate, String mail,
+//                           String password, String phoneNumber, LocalDate accountClosingDate) {
+//            this.name = name;
+//            this.surname = surname;
+//            this.birthdate = birthdate;
+//            this.mail = mail;
+//            this.password = password;
+//            this.phoneNumber = phoneNumber;
+//            this.accountClosingDate = accountClosingDate;
+//        }
 
-        /// FUNCTIONS ///
+    public CustomerDto(Integer id, String name, String surname, LocalDate birthdate,
+                       LocalDate subscriptionDate, String mail, String phoneNumber, LocalDate accountClosingDate) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.birthdate = birthdate;
+        this.subscriptionDate = subscriptionDate;
+        this.mail = mail;
+        this.phoneNumber = phoneNumber;
+        this.accountClosingDate = accountClosingDate;
+    }
+
+    public CustomerDto(String name, String surname, LocalDate birthdate,
+                       LocalDate subscriptionDate, String mail, String phoneNumber, LocalDate accountClosingDate) {
+        this.name = name;
+        this.surname = surname;
+        this.birthdate = birthdate;
+        this.subscriptionDate = subscriptionDate;
+        this.mail = mail;
+        this.phoneNumber = phoneNumber;
+        this.accountClosingDate = accountClosingDate;
+    }
+
+
+    /// FUNCTIONS ///
 
         /// GETTERS ///
 
@@ -86,9 +111,9 @@ public class CustomerDto {
         return mail;
     }
 
-    public String getPassword() {
-        return password;
-    }
+//    public String getPassword() {
+//        return password;
+//    }
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -98,9 +123,9 @@ public class CustomerDto {
         return accountClosingDate;
     }
 
-    public Address getAddresse() {
-        return address;
-    }
+//    public Address getAddresse() {
+//        return address;
+//    }
 
     /// SETTERS ///
 
@@ -127,10 +152,10 @@ public class CustomerDto {
     public void setMail(String mail) {
         this.mail = mail;
     }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+//
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
@@ -140,9 +165,9 @@ public class CustomerDto {
         this.accountClosingDate = accountClosingDate;
     }
 
-    public void setAddresse(Address address) {
-        this.address = address;
-    }
+//    public void setAddresse(Address address) {
+//        this.address = address;
+//    }
 
     /// HASHCODE ///
 

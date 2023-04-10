@@ -20,8 +20,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
+
+/**
+ *  This class stores the methods
+ *  - related to the requests of performances
+ *  - event management (CRUD)
+ *  - the management of the status of "requestPerform" (CRUD)
+ */
 @Service
 public class RequestManamentServiceImpl implements RequestManagmentService {
 
@@ -143,6 +151,8 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
         return statusRequestPerformFound;
     }
 
+
+
     @Override
     public Event feedEvents(Event event) {
         Event eventFound = null;
@@ -163,6 +173,12 @@ public class RequestManamentServiceImpl implements RequestManagmentService {
         //ajoute si possible
         //retourne si deja present
         return eventDao.save(event) ;
+    }
+
+    @Override
+    public List<Event> showAllEvents() {
+
+        return eventDao.findAll();
     }
 
 

@@ -6,6 +6,14 @@ import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentEventException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentStatusPerformException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.RequestPerformRegistrationFailedException;
 
+import java.util.List;
+
+/**
+ *  This interface stores the signature of the methods
+ *  - related to the requests of performances
+ *  - event management (CRUD)
+ *  - the management of the status of "requestPerform" (CRUD)
+ */
 public interface RequestManagmentService {
 
     RequestPerform applyingForPerformance(RequestPerform requestPerform)
@@ -23,6 +31,9 @@ public interface RequestManagmentService {
 
 
     Event feedEvents(Event event);
+
+
+    List<Event> showAllEvents();
 
 
     }

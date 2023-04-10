@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("events")
@@ -20,10 +22,22 @@ public class EventRestController {
     RequestManagmentService requestManagmentService;
 
     //WIP
-    public List<String> retrieveEvents(){
 
-        return null;
+    @GetMapping("/show/all")
+    public ResponseEntity<?> retrieveEvents(){
+        /*
+        Dans postMan : http://localhost:8097/events/show/all
+         */
 
+        List<Event> eventList = new ArrayList<>();
+        try{
+            eventList = requestManagmentService.showAllEvents();
+        }catch(Exception e){
+            logger.info("Impossible de recupérer la liste des événements");
+            return ResponseEntity.badRequest().body("Une anomalie s'est produite");
+        }
+
+        return ResponseEntity.ok(eventList);
     }
 
     /**
@@ -33,6 +47,15 @@ public class EventRestController {
      */
     @PostMapping("/new")
     public ResponseEntity<?> saveNewEvent(@RequestBody Event event){
+        /*
+        Dans postMan : http://localhost:8097/events/new
+
+        Json:
+            {
+                "label":"Test twone",
+                "available": true
+            }
+         */
         Event eventToCheck= null;
         try {
              eventToCheck = requestManagmentService.feedEvents(event);

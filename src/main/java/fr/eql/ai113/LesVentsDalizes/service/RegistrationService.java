@@ -3,6 +3,7 @@ package fr.eql.ai113.LesVentsDalizes.service;
 import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
 import fr.eql.ai113.LesVentsDalizes.entity.Member;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.CustomerDto;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
 
 /**
@@ -12,15 +13,24 @@ import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
 public interface RegistrationService {
 
 
-    Customer checkIfLoginAvailable(String login);
+
 
     Customer createCustomerAccount(Customer customer);
 
-    Member registerNewMember(Member member);
+    //Customer createMemberAccount(Customer customer);
 
     Address createAddresseCustomer(Address address);
 
-   Address checkIfAddressAlreadyUsed(Address address);
+    Customer checkIfLoginAvailable(String login);
+    Address checkIfAddressAlreadyUsed(Address address);
+
+    Member registerNewMember(Member member);
+
+
+
+
+
+
 
     Customer findCustomerById(Long id);
 

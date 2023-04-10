@@ -22,12 +22,12 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "le nom doit etre renseigné")
-    @NotEmpty(message = "le nom doit etre renseigné")
+    //@NotNull(message = "le nom doit etre renseigné")
+    //@NotEmpty(message = "le nom doit etre renseigné")
     @Column(name = "name")
     private String name;
-    @NotNull(message = "le prénom doit etre renseigné")
-    @NotEmpty(message = "le prénom doit etre renseigné")
+   // @NotNull(message = "le prénom doit etre renseigné")
+    //@NotEmpty(message = "le prénom doit etre renseigné")
     @Column(name = "surname")
     private String surname;
     @Column(name = "birthdate")
@@ -39,7 +39,7 @@ public class Customer {
     /**
      *
      */
-    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "format de email est invalide")
+    //@Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "format de email est invalide")
     @Column(name = "email")
     private String email;
 
@@ -113,17 +113,14 @@ public class Customer {
 
     public Customer(Long id, String name, String surname, LocalDate birthdate, LocalDate subscriptionDate, String email, String password, String phoneNumber, LocalDate accountClosingDate, Address address) {
         this.id = id;
-        this.name = name;
-        this.surname = surname;
+        setName(name); //this.name = name;
+        setSurname(surname); //this.surname = surname;
         this.birthdate = birthdate;
         this.subscriptionDate = subscriptionDate;
-        this.email = email;
+        setEmail(email); //this.email = email;
         this.password = password;
-        this.phoneNumber = phoneNumber;
+        setPhoneNumber(phoneNumber); //this.phoneNumber = phoneNumber;
         this.accountClosingDate = accountClosingDate;
-//        Addresse addresse1 = new Addresse(addresse.getId(),
-//                addresse.getNumberRoad(), addresse.getRoad(),
-//                addresse.getZipCode(), addresse.getCity(), addresse.getCountry());
         this.address = address;//addresse1;
 
 
@@ -182,11 +179,11 @@ public class Customer {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public void setSurname(String surname) {
-        this.surname = surname;
+        this.surname = surname.trim();
     }
 
     public void setBirthdate(LocalDate birthdate) {
@@ -198,7 +195,7 @@ public class Customer {
     }
 
     public void setEmail(String mail) {
-        this.email = mail;
+        this.email = mail.trim();
     }
 
     public void setPassword(String password) {
@@ -206,7 +203,7 @@ public class Customer {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber.trim();
     }
 
     public void setAccountClosingDate(LocalDate accountClosingDate) {
