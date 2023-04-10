@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * this class represents the members of the association
  */
-@Entity(name = "members")
+@Entity(name = "member")
 public class Member extends Customer{
 
 

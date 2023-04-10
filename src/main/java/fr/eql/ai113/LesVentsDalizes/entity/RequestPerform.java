@@ -52,7 +52,7 @@ public class RequestPerform {
 
     //WIP STATUS
     @OneToOne(cascade =  CascadeType.ALL)
-    @JoinColumn(name = "status_perform_d", referencedColumnName = "id")
+    @JoinColumn(name = "status_perform_id", referencedColumnName = "id")
     private StatusPerform statusPerform;
 
 
