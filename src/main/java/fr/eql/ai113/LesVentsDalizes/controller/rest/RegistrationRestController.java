@@ -146,15 +146,15 @@ public class RegistrationRestController  {
         }
 
 
-        customerValidator.validate(customer,result);
-        if(result.hasErrors()){
-            List<String> errors = new ArrayList<>();
-            for (ObjectError error : result.getAllErrors()) {
-                errors.add(error.getDefaultMessage());
-            }
-            logger.info(" Les données du client ne sont pas valide : "+errors);
-            return ResponseEntity.badRequest().body("L'enregistrement du clietn à échouée");
-        }
+//        customerValidator.validate(customer,result);
+//        if(result.hasErrors()){
+//            List<String> errors = new ArrayList<>();
+//            for (ObjectError error : result.getAllErrors()) {
+//                errors.add(error.getDefaultMessage());
+//            }
+//            logger.info(" Les données du client ne sont pas valide : "+errors);
+//            return ResponseEntity.badRequest().body("L'enregistrement du clietn à échouée");
+//        }
 
         if(customer == null) {
             logger.info("La creation du nouveau client ne peut aboutir 'probleme de données' ");

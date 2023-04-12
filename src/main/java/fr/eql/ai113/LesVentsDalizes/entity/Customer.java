@@ -1,12 +1,17 @@
 package fr.eql.ai113.LesVentsDalizes.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -16,7 +21,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "customers")
 //@Inheritance(strategy = InheritanceType.JOINED)
-public class Customer {
+public class Customer implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,16 +44,17 @@ public class Customer {
     /**
      *
      */
-    //@Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "format de email est invalide")
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
+    @JsonIgnore
     private String email;
 
 
     @Column(name = "password")
+    @JsonIgnore
     private String password;
 
-    @NotNull(message = "le numéro de téléphone doit etre renseigné")
-    @NotEmpty(message = "le numéro de téléphone doit etre renseigné")
+    //@NotNull(message = "le numéro de téléphone doit etre renseigné")
+    //@NotEmpty(message = "le numéro de téléphone doit etre renseigné")
     @Column(name = "phone_number")
 
     private String phoneNumber;
@@ -81,6 +87,9 @@ public class Customer {
     //V2
     @OneToMany(mappedBy = "customer")
     private List<RequestPerform> requestPerformList = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Role> roles;
 
     /// CONSTRUCTOR ///
 
@@ -123,12 +132,18 @@ public class Customer {
         this.accountClosingDate = accountClosingDate;
         this.address = address;//addresse1;
 
+    }
 
 
-
+    public Customer(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
     /// FUNCTIONS ///
+
+    /// OVERIDE ///
+
 
     /// GETTERS ///:
 
@@ -156,8 +171,45 @@ public class Customer {
         return email;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        //return null;
+        return roles;
+    }
+
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        //return null;
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        //return false;
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        //return false;
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        //return false;
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        //return false;
+        return true;
     }
 
     public String getPhoneNumber() {
@@ -201,6 +253,7 @@ public class Customer {
     public void setPassword(String password) {
         this.password = password;
     }
+
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber.trim();
