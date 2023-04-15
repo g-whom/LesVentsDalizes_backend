@@ -9,85 +9,97 @@ import java.time.LocalDate;
 
 public class CustomerDto {
 
-        private Integer id;
+    private Long id;
+    private String name;
+    private String surname;
+    private LocalDate birthdate;
+    private LocalDate subscriptionDate;
+    private String email;
+    private String password;
+    private String phoneNumber;
+    private LocalDate accountClosingDate;
+    private Address address;
+    public Long address_id;
 
 
-        private String name;
-
-        private String surname;
-
-        private LocalDate birthdate;
-
-        private LocalDate subscriptionDate;
-
-        private String mail;
-//        private String password;
-
-        private String phoneNumber;
-
-        private LocalDate accountClosingDate;
+    //// CONSTRUCTOR ////
 
 
-       // private Address address;
+    public CustomerDto() {
+    }
 
-        /// CONSTRUCTOR ///
+    public CustomerDto(String name, String surname, LocalDate birthdate,
+                       LocalDate subscriptionDate, String email, String password,
+                       String phoneNumber, LocalDate accountClosingDate, Address address) {
+        this.name = name;
+        this.surname = surname;
+        this.birthdate = birthdate;
+        this.subscriptionDate = subscriptionDate;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.accountClosingDate = accountClosingDate;
+        this.address = address;
+    }
 
-        /**
-         * Default constructor for a customer
-         */
-        public CustomerDto() {
-        }
-
-        /**
-         * Constructor with parameters for a customer
-         * @param name name of the customer
-         * @param surname lastname of the customer
-         * @param birthdate
-         * @param mail
-        // * @param password
-         * @param phoneNumber
-         * @param accountClosingDate
-         */
-//        public CustomerDto(String name, String surname, LocalDate birthdate, String mail,
-//                           String password, String phoneNumber, LocalDate accountClosingDate) {
-//            this.name = name;
-//            this.surname = surname;
-//            this.birthdate = birthdate;
-//            this.mail = mail;
-//            this.password = password;
-//            this.phoneNumber = phoneNumber;
-//            this.accountClosingDate = accountClosingDate;
-//        }
-
-    public CustomerDto(Integer id, String name, String surname, LocalDate birthdate,
-                       LocalDate subscriptionDate, String mail, String phoneNumber, LocalDate accountClosingDate) {
+    public CustomerDto(Long id, String name, String surname, LocalDate birthdate,
+                       LocalDate subscriptionDate, String email, String password,
+                       String phoneNumber, LocalDate accountClosingDate, Address address) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.birthdate = birthdate;
         this.subscriptionDate = subscriptionDate;
-        this.mail = mail;
+        this.email = email;
+        this.password = password;
         this.phoneNumber = phoneNumber;
         this.accountClosingDate = accountClosingDate;
+        this.address = address;
     }
 
     public CustomerDto(String name, String surname, LocalDate birthdate,
-                       LocalDate subscriptionDate, String mail, String phoneNumber, LocalDate accountClosingDate) {
+                       LocalDate subscriptionDate, String email, String password,
+                       String phoneNumber) {
         this.name = name;
         this.surname = surname;
         this.birthdate = birthdate;
         this.subscriptionDate = subscriptionDate;
-        this.mail = mail;
+        this.email = email;
+        this.password = password;
         this.phoneNumber = phoneNumber;
-        this.accountClosingDate = accountClosingDate;
     }
 
+    public CustomerDto(String name, String surname, LocalDate birthdate,
+                       LocalDate subscriptionDate, String email, String password,
+                       String phoneNumber, Address address) {
+        this.name = name;
+        this.surname = surname;
+        this.birthdate = birthdate;
+        this.subscriptionDate = subscriptionDate;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+    }
 
-    /// FUNCTIONS ///
+    public CustomerDto(String name, String surname, LocalDate birthdate, LocalDate subscriptionDate,
+                       String email, String password, String phoneNumber, LocalDate accountClosingDate,
+                       Address address, Long address_id) {
+        this.name = name;
+        this.surname = surname;
+        this.birthdate = birthdate;
+        this.subscriptionDate = subscriptionDate;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.accountClosingDate = accountClosingDate;
+        this.address = address;
+        this.address_id = address_id;
+    }
 
-        /// GETTERS ///
+    //// GETTERS  ////
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -107,13 +119,13 @@ public class CustomerDto {
         return subscriptionDate;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-//    public String getPassword() {
-//        return password;
-//    }
+    public String getPassword() {
+        return password;
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -123,13 +135,16 @@ public class CustomerDto {
         return accountClosingDate;
     }
 
-//    public Address getAddresse() {
-//        return address;
-//    }
+    public Address getAddress() {
+        return address;
+    }
 
-    /// SETTERS ///
+    public Long getAddress_id() {
+        return address_id;
+    }
+    //// SETTERS  ////
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -149,13 +164,13 @@ public class CustomerDto {
         this.subscriptionDate = subscriptionDate;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
-//
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
@@ -165,19 +180,31 @@ public class CustomerDto {
         this.accountClosingDate = accountClosingDate;
     }
 
-//    public void setAddresse(Address address) {
-//        this.address = address;
-//    }
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
-    /// HASHCODE ///
+    public void setAddress_id(Long address_id) {
+        this.address_id = address_id;
+    }
+    //// TOSTRING ////
 
-        /// EQUALS ///
+    public String toString() {
+        return "AuthRequest{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", birthdate=" + birthdate +
+                ", subscriptionDate=" + subscriptionDate +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", accountClosingDate=" + accountClosingDate +
+                ", address=" + address.toString() +
+                ", address_id=" + address_id +
+                '}';
+    }
 
-        /// TOSTRING ///
 
 
-
-
-
-    //********************
 }

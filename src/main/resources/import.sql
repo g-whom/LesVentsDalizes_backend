@@ -366,3 +366,17 @@ insert into `request_perform` ( `date_creation_request`, `date_perform_requested
 insert into `request_perform` ( `date_creation_request`, `date_perform_requested`, `start_time`, `end_time`, `description_request`, `status_request_perform_id`, `event_id`, `customer_id`) values ( '2022-11-09', '2023-12-24', '8:30:00', '13:30:00', 'Maecenas tincidunt lacus at velit.', 1, 1, 14);
 
 
+--- gestion des rôles
+insert into `role` ( `name`) VALUES ("Super Administrateur");
+insert into `role` ( `name`) VALUES ("Administrateur");
+insert into `role` ( `name`) VALUES ("Membre");
+insert into `role` ( `name`) VALUES ("Client");
+insert into `role` ( `name`) VALUES ("Visiteur");
+insert into `role` ( `name`) VALUES ("Coordinateur d''événements");
+insert into `role` ( `name`) VALUES ("Gestionnaire des ressources");
+-- insert into `role` ( `name`) VALUES ("Trésorier");
+-- insert into `role` ( `name`) VALUES ("Responsable des bénévoles");
+-- insert into `role` ( `name`) VALUES ("Responsable de la communication");
+
+
+

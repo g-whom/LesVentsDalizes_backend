@@ -3,7 +3,6 @@ package fr.eql.ai113.LesVentsDalizes.service.impl;
 import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
 import fr.eql.ai113.LesVentsDalizes.entity.Member;
-import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
 import fr.eql.ai113.LesVentsDalizes.repository.AddressDao;
 import fr.eql.ai113.LesVentsDalizes.repository.CustomerDao;
 import fr.eql.ai113.LesVentsDalizes.repository.MemberDao;
@@ -12,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -58,7 +55,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         System.out.println("avons nous le montant ? : "+member.getRegistrationFee());
         System.out.println("vrais ou faux (upToDate) ? "+ member.getUpToDate());
 
-        member.setAddresse(address);
+        member.setAddress(address);
 
         System.out.println("l'addresse du 1er membre\t\n\t\n : "+ member.toString());
 

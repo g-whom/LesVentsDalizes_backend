@@ -6,9 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -71,6 +68,8 @@ public class Customer implements UserDetails {
     private Address address;
 
 
+
+
     //--[WIP]------------CLASS >> --- Links
 
     //[WIP] Demande : RequestPerfom
@@ -92,6 +91,7 @@ public class Customer implements UserDetails {
     private Collection<Role> roles;
 
     /// CONSTRUCTOR ///
+
 
 
     /**
@@ -263,7 +263,7 @@ public class Customer implements UserDetails {
         this.accountClosingDate = accountClosingDate;
     }
 
-    public void setAddresse(Address address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

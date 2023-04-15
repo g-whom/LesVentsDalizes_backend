@@ -10,15 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 
 @RestController
@@ -172,7 +168,7 @@ public class RegistrationRestController  {
         Address addressCustomerValidate = registrationService.createAddresseCustomer(addressWIP);
 
         logger.info("VERIFION =>>>>>>>>>>>>>>>>> : "+addressCustomerValidate.toString());
-        customer.setAddresse(addressCustomerValidate);
+        customer.setAddress(addressCustomerValidate);
         customer.setSubscriptionDate(LocalDate.now());
 
         logger.info("SHOW THE CUSTOMER INFO :: \r\n"+ customer.toString());

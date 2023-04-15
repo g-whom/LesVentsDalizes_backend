@@ -15,7 +15,7 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "number_road")
     private String numberRoad;
@@ -60,7 +60,7 @@ public class Address {
      * @param city
      * @param country
      */
-    public Address(Integer id, String numberRoad, String road, String zipCode, String city, String country) {
+    public Address(Long id, String numberRoad, String road, String zipCode, String city, String country) {
         //this.id = id;
         setId(id);
         //this.numberRoad =
@@ -86,7 +86,7 @@ public class Address {
 
     /// GETTERS ///
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -120,7 +120,7 @@ public class Address {
         this.city = normaliseString(city);
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
