@@ -2,6 +2,7 @@ package fr.eql.ai113.LesVentsDalizes.controller.rest;
 
 import fr.eql.ai113.LesVentsDalizes.entity.dto.AuthRequest;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.AuthResponse;
+import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentRoleException;
 import fr.eql.ai113.LesVentsDalizes.service.RegistrationService;
 import fr.eql.ai113.LesVentsDalizes.exceptions.AccountExistsException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.UnauthorizedException;
@@ -58,7 +59,7 @@ public class SecurityRestController {
     //http://localhost:8097/security/register
     @PostMapping("/register")
     //ResponseEntity<AuthResponse>
-    public ResponseEntity<?> register(@RequestBody AuthRequest requestDto) throws AccountExistsException {
+    public ResponseEntity<?> register(@RequestBody AuthRequest requestDto) throws AccountExistsException, NonExistentRoleException {
 
         //////////////
         UserDetails owner = userService.save(requestDto);

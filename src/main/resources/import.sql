@@ -367,13 +367,20 @@ insert into `request_perform` ( `date_creation_request`, `date_perform_requested
 
 
 --- gestion des rôles
-insert into `role` ( `name`) VALUES ("Super Administrateur");
-insert into `role` ( `name`) VALUES ("Administrateur");
-insert into `role` ( `name`) VALUES ("Membre");
-insert into `role` ( `name`) VALUES ("Client");
-insert into `role` ( `name`) VALUES ("Visiteur");
-insert into `role` ( `name`) VALUES ("Coordinateur d''événements");
-insert into `role` ( `name`) VALUES ("Gestionnaire des ressources");
+-- insert into `role` ( `name`) VALUES ("Super Administrateur");
+insert into `role` ( `name`) VALUES ("ROLE_SUPER_ADMIN");
+-- insert into `role` ( `name`) VALUES ("Administrateur");
+insert into `role` ( `name`) VALUES ("ROLE_ADMIN");
+-- insert into `role` ( `name`) VALUES ("Membre");
+insert into `role` ( `name`) VALUES ("ROLE_STAFF");
+-- insert into `role` ( `name`) VALUES ("Client");
+insert into `role` ( `name`) VALUES ("ROLE_USER");
+-- insert into `role` ( `name`) VALUES ("Visiteur");
+insert into `role` ( `name`) VALUES ("ROLE_GUEST");
+-- insert into `role` ( `name`) VALUES ("Coordinateur d''événements");
+-- insert into `role` ( `name`) VALUES ("Coordinateur d''événements");
+-- insert into `role` ( `name`) VALUES ("Gestionnaire des ressources");
+-- insert into `role` ( `name`) VALUES ("Gestionnaire des ressources");
 -- insert into `role` ( `name`) VALUES ("Trésorier");
 -- insert into `role` ( `name`) VALUES ("Responsable des bénévoles");
 -- insert into `role` ( `name`) VALUES ("Responsable de la communication");

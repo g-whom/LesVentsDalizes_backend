@@ -88,7 +88,7 @@ public class Customer implements UserDetails {
     private List<RequestPerform> requestPerformList = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Role> roles;
+    private Collection<Role> roles; // = new ArrayList<>();
 
     /// CONSTRUCTOR ///
 
@@ -170,6 +170,8 @@ public class Customer implements UserDetails {
     public String getEmail() {
         return email;
     }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -265,6 +267,10 @@ public class Customer implements UserDetails {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 
     /// HASHCODE ///

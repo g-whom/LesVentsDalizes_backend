@@ -24,6 +24,7 @@ public class AuthRequest {
     private LocalDate accountClosingDate;
     private Address address;
     public Long address_id;
+    private Collection<Role> roles = new ArrayList<>();
 
 
     //// CONSTRUCTOR ////
@@ -146,6 +147,11 @@ public class AuthRequest {
     public Long getAddress_id() {
         return address_id;
     }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
     //// SETTERS  ////
 
     public void setId(Long id) {
@@ -190,6 +196,10 @@ public class AuthRequest {
 
     public void setAddress_id(Long address_id) {
         this.address_id = address_id;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
     //// TOSTRING ////
 

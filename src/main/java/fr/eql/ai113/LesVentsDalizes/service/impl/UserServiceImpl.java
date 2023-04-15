@@ -2,9 +2,12 @@ package fr.eql.ai113.LesVentsDalizes.service.impl;
 
 import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
+import fr.eql.ai113.LesVentsDalizes.entity.Role;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.AuthRequest;
 import fr.eql.ai113.LesVentsDalizes.exceptions.AccountExistsException;
+import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentRoleException;
 import fr.eql.ai113.LesVentsDalizes.repository.CustomerDao;
+import fr.eql.ai113.LesVentsDalizes.repository.RoleDao;
 import fr.eql.ai113.LesVentsDalizes.service.RegistrationService;
 import fr.eql.ai113.LesVentsDalizes.service.UserService;
 import io.jsonwebtoken.Claims;
@@ -27,7 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.*;
 
 @Service
 @Configuration
@@ -41,6 +44,8 @@ public class UserServiceImpl implements UserService {
     private RegistrationService registrationService;
 
     private final String signingKey;
+
+    private RoleDao roleDao;
 
     /// CONSTRUCTOR ///
 
@@ -75,7 +80,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails save(AuthRequest authRequest) throws AccountExistsException {
+    public UserDetails save(AuthRequest authRequest) throws AccountExistsException, NonExistentRoleException {
                 //if (ownerDao.findByLogin(username) != null) {
         if (customerDao.findCustomerByEmail(authRequest.getEmail()) != null) {
             throw new AccountExistsException();
@@ -99,6 +104,7 @@ public class UserServiceImpl implements UserService {
 
 
 
+
         logger.info(" Afffiche : "+authRequest.getName()+"\r\n .....");
         Customer owner = new Customer();
         owner.setName(authRequest.getName());
@@ -110,6 +116,34 @@ public class UserServiceImpl implements UserService {
         owner.setBirthdate(authRequest.getBirthdate());
         owner.setAddress(addressValidate);
         owner.setSubscriptionDate(LocalDate.now());
+
+
+        // gestion des roles
+        Collection<Role>roleCollection = authRequest.getRoles();
+
+        // Obtention d'un itérateur pour la collection
+        Iterator<Role> it = roleCollection.iterator();
+
+        Collection<Role>roleCollectionValidate=new ArrayList<>();
+        // Utilisation de l'itérateur pour parcourir la collection
+        while (it.hasNext()) {
+            Role element = it.next();
+            //saving...
+            logger.info("un role detecté hein : "+element.toString());
+
+            roleCollectionValidate.add( retrieveRole(element.getId()) );
+            System.out.println(element);
+        }
+        if (!roleCollectionValidate.isEmpty()){
+            owner.setRoles(roleCollectionValidate);
+        }
+
+
+        //partie Role ?
+
+
+
+
 
 
         //owner.setAccountClosingDate(authRequest.getAccountClosingDate());
@@ -157,6 +191,17 @@ public class UserServiceImpl implements UserService {
         return loadUserByUsername(username);
     }
 
+    @Override
+    public Role retrieveRole(Long id) throws NonExistentRoleException{
+
+       Optional<Role> roleTocheck = roleDao.findById(id) ;
+       if(roleTocheck.isPresent()){
+           return roleTocheck.get();
+       }
+       throw new NonExistentRoleException();
+       //return null;
+    }
+
     private String getUsernameFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(signingKey).parseClaimsJws(token).getBody();
         return claims.getSubject();
@@ -190,5 +235,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public void setRegistrationService(RegistrationService registrationService) {
         this.registrationService = registrationService;
+    }
+
+    @Autowired
+    public void setRoleDao(RoleDao roleDao) {
+        this.roleDao = roleDao;
     }
 }
