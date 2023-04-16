@@ -16,6 +16,14 @@ public class Role implements GrantedAuthority {
 
 
     /// CONSTRUCTORS ///
+
+    public Role() {
+    }
+
+    public Role(Long id) {
+        this.id = id;
+    }
+
     /// GETTERS ///
 
     public Long getId() {
@@ -35,7 +43,7 @@ public class Role implements GrantedAuthority {
     /// @OVERIDE ///
     @Override
     public String getAuthority() {
-        //return null;
+       // return null;
         return name;
     }
 

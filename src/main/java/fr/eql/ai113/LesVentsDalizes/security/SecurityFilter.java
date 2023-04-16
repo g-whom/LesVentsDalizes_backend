@@ -28,7 +28,10 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
+            logger.info("\r\n >>>>>>>>> BEFORE : Voici la valeur du toker dans SecurityFilter > doFilterInternal : \r\n");
             String token = extractTokenFromHeader(request);
+            //WIP : controle ephemere
+            logger.info("Voici la valeur du toker dans SecurityFilter > doFilterInternal : "+token.toString());
             UserDetails user = userService.getUserFromJwt(token);
             setPrincipalInSecurityContext(user);
         } catch (Exception e) {

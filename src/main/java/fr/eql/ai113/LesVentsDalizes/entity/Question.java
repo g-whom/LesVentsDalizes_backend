@@ -1,6 +1,7 @@
 package fr.eql.ai113.LesVentsDalizes.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 @Entity
 public class Question {
     @Id
+    @GeneratedValue()
     private Long id;
 
     private String label;

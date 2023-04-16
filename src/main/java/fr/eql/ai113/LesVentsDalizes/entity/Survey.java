@@ -19,7 +19,8 @@ public class Survey {
     private String question;
 
     @OneToMany
-    private List<Response> SuggestedAnswersList=  new ArrayList<>();
+    private List<Answer> SuggestedAnswersList=  new ArrayList<>();
+    // OLD private List<Response> SuggestedAnswersList=  new ArrayList<>();
 
     LocalDate surveyCreationDate;
 

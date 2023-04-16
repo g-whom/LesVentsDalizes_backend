@@ -16,8 +16,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Validator;
 
 
@@ -32,7 +34,12 @@ public class SecurityRestController {
     RegistrationService registrationService;
     CustomerValidator customerValidator;
     Validator validator;
+
+   //WIP :  private HttpSessionCsrfTokenRepository csrfTokenRepository = new HttpSessionCsrfTokenRepository();
+
 //http://localhost:8097/security/authorize
+
+
     @PostMapping("/authorize")
     public ResponseEntity<AuthResponse> authorize(@RequestBody AuthRequest requestDto) throws UnauthorizedException {
         Authentication authentication;
@@ -57,6 +64,8 @@ public class SecurityRestController {
     }
 
     //http://localhost:8097/security/register
+    @RequestMapping("/*")
+    //@RolesAllowed("ROLE_GUEST")
     @PostMapping("/register")
     //ResponseEntity<AuthResponse>
     public ResponseEntity<?> register(@RequestBody AuthRequest requestDto) throws AccountExistsException, NonExistentRoleException {

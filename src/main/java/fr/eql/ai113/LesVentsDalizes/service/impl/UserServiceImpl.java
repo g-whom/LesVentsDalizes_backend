@@ -81,58 +81,69 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails save(AuthRequest authRequest) throws AccountExistsException, NonExistentRoleException {
-                //if (ownerDao.findByLogin(username) != null) {
+        //if (ownerDao.findByLogin(username) != null) {
         if (customerDao.findCustomerByEmail(authRequest.getEmail()) != null) {
             throw new AccountExistsException();
         }
 
         //Get id address
         Address addressValidate = authRequest.getAddress();
-        logger.info("Affichons l'adresse ? "+authRequest.getAddress().toString());
+        logger.info("Affichons l'adresse ? " + authRequest.getAddress().toString());
 
-        if (registrationService.checkIfAddressAlreadyUsed(addressValidate)!=null){
+        if (registrationService.checkIfAddressAlreadyUsed(addressValidate) != null) {
             addressValidate = registrationService.checkIfAddressAlreadyUsed(addressValidate);
 
         }
         Address addressCustomerValidate = registrationService.createAddresseCustomer(addressValidate);
 
-        logger.info("VERIFION => l'adresse recupéee >>>>>>>>>>>>>>>> : "+addressCustomerValidate.toString());
+        logger.info("VERIFION => l'adresse recupéee >>>>>>>>>>>>>>>> : " + addressCustomerValidate.toString());
 
 //        authRequest.setAddress(addressCustomerValidate);
 //        authRequest.setSubscriptionDate(LocalDate.now());
 //        authRequest.setAddress_id(addressValidate.getId());
 
 
-
-
-        logger.info(" Afffiche : "+authRequest.getName()+"\r\n .....");
+        logger.info(" Afffiche : " + authRequest.getName() + "\r\n .....");
         Customer owner = new Customer();
         owner.setName(authRequest.getName());
         owner.setSurname(authRequest.getSurname());
         owner.setPhoneNumber(authRequest.getPhoneNumber());
-        owner.setPassword( passwordEncoder().encode(  authRequest.getPassword() )  );
+        owner.setPassword(passwordEncoder().encode(authRequest.getPassword()));
         owner.setSubscriptionDate(authRequest.getSubscriptionDate());
         owner.setEmail(authRequest.getEmail());
         owner.setBirthdate(authRequest.getBirthdate());
         owner.setAddress(addressValidate);
         owner.setSubscriptionDate(LocalDate.now());
 
+        Collection<Role> roleCollectionValidate = new ArrayList<>();
 
-        // gestion des roles
-        Collection<Role>roleCollection = authRequest.getRoles();
+        if (authRequest.getRoles().isEmpty()) {
+            logger.info("PAs de ROLE TROUVE.. On S'EN Occupe.. :\t\r\n");
+            Collection<Role> roleCoellectionCustomer = new ArrayList<Role>();//new Role(3L);
+            Role roleCustomer = new Role(3L);
+            roleCoellectionCustomer.add(roleCustomer);
+            authRequest.setRoles(roleCoellectionCustomer);
 
-        // Obtention d'un itérateur pour la collection
-        Iterator<Role> it = roleCollection.iterator();
+            roleCollectionValidate.add(roleCustomer);
+        }else{
+            // gestion des roles
+            Collection<Role> roleCollection = authRequest.getRoles();
 
-        Collection<Role>roleCollectionValidate=new ArrayList<>();
-        // Utilisation de l'itérateur pour parcourir la collection
-        while (it.hasNext()) {
-            Role element = it.next();
-            //saving...
-            logger.info("un role detecté hein : "+element.toString());
+            // Obtention d'un itérateur pour la collection
+            Iterator<Role> it = roleCollection.iterator();
 
-            roleCollectionValidate.add( retrieveRole(element.getId()) );
-            System.out.println(element);
+
+            // Utilisation de l'itérateur pour parcourir la collection
+            logger.info("AFFICHONS LES ROLES TROUVES :\t\r\n");
+            logger.info("il y en a normalement : " + authRequest.getRoles().size());
+            while (it.hasNext()) {
+                Role element = it.next();
+                //saving...
+                logger.info("un role detecté hein : " + element.toString());
+
+                roleCollectionValidate.add(retrieveRole(element.getId()));
+                System.out.println(element);
+            }
         }
         if (!roleCollectionValidate.isEmpty()){
             owner.setRoles(roleCollectionValidate);
@@ -195,11 +206,11 @@ public class UserServiceImpl implements UserService {
     public Role retrieveRole(Long id) throws NonExistentRoleException{
 
        Optional<Role> roleTocheck = roleDao.findById(id) ;
-       if(roleTocheck.isPresent()){
-           return roleTocheck.get();
+       if(!roleTocheck.isPresent()){
+           throw new NonExistentRoleException();
        }
-       throw new NonExistentRoleException();
-       //return null;
+        //return null;
+        return roleTocheck.get();
     }
 
     private String getUsernameFromToken(String token) {
