@@ -119,12 +119,19 @@ public class UserServiceImpl implements UserService {
 
         if (authRequest.getRoles().isEmpty()) {
             logger.info("PAs de ROLE TROUVE.. On S'EN Occupe.. :\t\r\n");
+            //creation de la collection
             Collection<Role> roleCoellectionCustomer = new ArrayList<Role>();//new Role(3L);
-            Role roleCustomer = new Role(3L);
-            roleCoellectionCustomer.add(roleCustomer);
-            authRequest.setRoles(roleCoellectionCustomer);
 
-            roleCollectionValidate.add(roleCustomer);
+            // update => recuperation
+            //Role roleCustomer = new Role(3L);
+            //4 : ROLE_USER
+            Optional<Role> roleCustomer = roleDao.findById(4L);
+            if (!roleCustomer.isPresent()){
+                throw new NonExistentRoleException();
+            }
+            roleCoellectionCustomer.add(roleCustomer.get());
+            authRequest.setRoles(roleCoellectionCustomer);
+            roleCollectionValidate.add(roleCustomer.get());
         }else{
             // gestion des roles
             Collection<Role> roleCollection = authRequest.getRoles();
