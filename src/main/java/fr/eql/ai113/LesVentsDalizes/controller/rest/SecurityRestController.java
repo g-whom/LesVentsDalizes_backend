@@ -1,5 +1,6 @@
 package fr.eql.ai113.LesVentsDalizes.controller.rest;
 
+import fr.eql.ai113.LesVentsDalizes.entity.Customer;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.AuthRequest;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.AuthResponse;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentRoleException;
@@ -43,17 +44,22 @@ public class SecurityRestController {
     @PostMapping("/authorize")
     public ResponseEntity<AuthResponse> authorize(@RequestBody AuthRequest requestDto) throws UnauthorizedException {
         Authentication authentication;
-            logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\t\n\r\n");
+            logger.info(">>>>>>>>>>>>IN authorize>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\t\n\r\n");
         try {
             //authentication = userService.authenticate(requestDto.getUsername(), requestDto.getPassword());
             authentication = userService.authenticate(requestDto);
+
+            logger.info("dans : authorize [SecurityController] controle de l'authentificatopn : "+authentication);
 //            logger.info(authentication.getName().toString());
 //            logger.info("verif ...");
 //            logger.info(authentication.toString());
-//            logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\t\n\r\n");
+           logger.info(">>>[authorize]  Peux ton setter le context de securité  ??>>>>>>>>>>>>>>>>>>>>>>>>>>>\t\n\r\n");
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            logger.info(">>> [authorize] alors : " +SecurityContextHolder.getContext().getAuthentication().toString());
             UserDetails owner = (UserDetails) authentication.getPrincipal();
+            logger.info(">>> [authorize] avons nous le owwner ok ? : "+owner);
             String token = userService.generateJwtForUser(owner);
+            logger.info(">>> [authorize] le token est : "+token);
             return ResponseEntity.ok(new AuthResponse(owner, token));
 
 
@@ -68,10 +74,11 @@ public class SecurityRestController {
     //@RolesAllowed("ROLE_GUEST")
     @PostMapping("/register")
     //ResponseEntity<AuthResponse>
-    public ResponseEntity<?> register(@RequestBody AuthRequest requestDto) throws AccountExistsException, NonExistentRoleException {
+//    public ResponseEntity<?> register(@RequestBody AuthRequest requestDto) throws AccountExistsException, NonExistentRoleException {
+    public ResponseEntity<?> register(@RequestBody Customer customer) throws AccountExistsException, NonExistentRoleException {
 
         //////////////
-        UserDetails owner = userService.save(requestDto);
+        UserDetails owner = userService.save(customer);
         String token  = userService.generateJwtForUser(owner);
         return ResponseEntity.ok(new AuthResponse(owner, token));
     }

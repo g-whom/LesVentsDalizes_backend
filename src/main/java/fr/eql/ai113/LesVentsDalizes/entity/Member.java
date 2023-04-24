@@ -61,18 +61,18 @@ public class Member extends Customer{
     }
 
 //    public Member(Integer id, String name, String surname, LocalDate birthdate,
-//                  LocalDate subscriptionDate, String email, String password, String phoneNumber,
+//                  LocalDate subscriptionDate, String username, String password, String phoneNumber,
 //                  LocalDate accountClosingDate, Address address, LocalDate dateOfMembership) {
-//        super(id, name, surname, birthdate, subscriptionDate, email, password, phoneNumber,
+//        super(id, name, surname, birthdate, subscriptionDate, username, password, phoneNumber,
 //                accountClosingDate, address);
 //        this.dateOfMembership = dateOfMembership;
 //    }
 
     public Member(Long id, String name, String surname, LocalDate birthdate,
-                  LocalDate subscriptionDate, String email, String password, String phoneNumber,
+                  LocalDate subscriptionDate, String username, String password, String phoneNumber,
                   LocalDate accountClosingDate, Address address, LocalDate dateOfMembership,
                   float registrationFee, boolean upToDate, boolean customerBecomingMember) {
-        super(id, name, surname, birthdate, subscriptionDate, email, password, phoneNumber,
+        super(id, name, surname, birthdate, subscriptionDate, username, password, phoneNumber,
                 accountClosingDate, address);
         this.dateOfMembership = dateOfMembership;
         this.registrationFee = registrationFee;

@@ -37,7 +37,7 @@ public class CustomerValidator implements Validator {
 
 
         Customer customer = (Customer) target;
-        if (!StringUtils.hasText(customer.getEmail())) {
+        if (!StringUtils.hasText(customer.getUsername())) {
             errors.rejectValue("email", "field.required", "L'email doit être renseigné");
 
             //if (!org.apache.commons.validator.EmailValidator.getInstance().isValid(email))
@@ -48,7 +48,7 @@ public class CustomerValidator implements Validator {
 //            {errors.rejectValue("email", "field.invalid"); }
         }
 
-        if (!StringUtils.hasText(customer.getEmail())){
+        if (!StringUtils.hasText(customer.getUsername())){
             errors.rejectValue("password", "Le mot de passe doit être renseigné");
 
         }else{

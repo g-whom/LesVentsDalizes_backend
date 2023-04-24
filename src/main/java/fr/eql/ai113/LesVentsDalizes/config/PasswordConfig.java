@@ -22,11 +22,11 @@ public class PasswordConfig {
     @EventListener(ApplicationReadyEvent.class)
     public  void onApplicationReady(){
 
-        passwordUpdateService.updateColumnPasswordWithBcrypt(
-                "cutomers",
-                "password",
-                1 ,
-                98);
+//        passwordUpdateService.updateColumnPasswordWithBcrypt(
+//                "cutomers",
+//                "password",
+//                1 ,
+//                98);
 
         logger.info("Votre application avec configuration personnalisée a été démarrée avec succès !");
     }

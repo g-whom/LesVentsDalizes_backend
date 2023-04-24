@@ -30,11 +30,11 @@ public class EmailValidator implements Validator {
         switch(target.getClass().getSimpleName()){
             case "Member":
                 Member member = (Member) target;
-                validateEmail(member.getEmail(),errors);
+                validateEmail(member.getUsername(),errors);
                 break;
             case "Customer":
                 Customer customer = (Customer) target;
-                validateEmail(customer.getEmail(),errors);
+                validateEmail(customer.getUsername(),errors);
                 break;
             default:  logger.info("Type d'objet non encore reconnu, (WIP: update EmailValidator)");
         }

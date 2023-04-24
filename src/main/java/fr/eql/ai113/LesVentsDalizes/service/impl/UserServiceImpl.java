@@ -73,25 +73,30 @@ public class UserServiceImpl implements UserService {
 
         @Override
     public Authentication authenticate(AuthRequest authRequest) throws AuthenticationException {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword());
         logger.info(authentication.toString());
-        logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>\r\n");
+        logger.info(">>>>>>>>>>authenticate>>(doit retourner la valeur Authentication)>>>>>>>>>>>>>>\r\n");
         return authenticationManager.authenticate(authentication);
     }
 
     @Override
-    public UserDetails save(AuthRequest authRequest) throws AccountExistsException, NonExistentRoleException {
+//    public UserDetails save(AuthRequest authRequest) throws AccountExistsException, NonExistentRoleException {
+    public UserDetails save(Customer customer) throws AccountExistsException, NonExistentRoleException {
+
+
+        logger.info("In [UserServiceImple > save] customer ? "+customer.toString());
         //if (ownerDao.findByLogin(username) != null) {
-        if (customerDao.findCustomerByEmail(authRequest.getEmail()) != null) {
+        if (customerDao.findCustomerByUsername(customer.getUsername()) != null) {
             throw new AccountExistsException();
         }
 
         //Get id address
-        Address addressValidate = authRequest.getAddress();
-        logger.info("Affichons l'adresse ? " + authRequest.getAddress().toString());
+        Address addressValidate = customer.getAddress();
+        logger.info("Affichons l'adresse ? " + customer.getAddress().toString());
 
         if (registrationService.checkIfAddressAlreadyUsed(addressValidate) != null) {
             addressValidate = registrationService.checkIfAddressAlreadyUsed(addressValidate);
+            logger.info("voici l'adresse qui doit etre ajoutéee : "+addressValidate.toString());
 
         }
         Address addressCustomerValidate = registrationService.createAddresseCustomer(addressValidate);
@@ -103,21 +108,24 @@ public class UserServiceImpl implements UserService {
 //        authRequest.setAddress_id(addressValidate.getId());
 
 
-        logger.info(" Afffiche : " + authRequest.getName() + "\r\n .....");
+        logger.info(" Afffiche le nom: " + customer.getName() + "\r\n .....");
+        logger.info(" Afffiche le username: " + customer.getUsername() + "\r\n .....");
+        logger.info(" Afffiche le password : " + customer.getPassword() + "\r\n .....");
         Customer owner = new Customer();
-        owner.setName(authRequest.getName());
-        owner.setSurname(authRequest.getSurname());
-        owner.setPhoneNumber(authRequest.getPhoneNumber());
-        owner.setPassword(passwordEncoder().encode(authRequest.getPassword()));
-        owner.setSubscriptionDate(authRequest.getSubscriptionDate());
-        owner.setEmail(authRequest.getEmail());
-        owner.setBirthdate(authRequest.getBirthdate());
+        owner.setName(customer.getName());
+        owner.setSurname(customer.getSurname());
+        owner.setPhoneNumber(customer.getPhoneNumber());
+
+        owner.setPassword(passwordEncoder().encode(customer.getPassword()));
+        owner.setSubscriptionDate(customer.getSubscriptionDate());
+        owner.setUsername(customer.getUsername());
+        owner.setBirthdate(customer.getBirthdate());
         owner.setAddress(addressValidate);
         owner.setSubscriptionDate(LocalDate.now());
 
         Collection<Role> roleCollectionValidate = new ArrayList<>();
 
-        if (authRequest.getRoles().isEmpty()) {
+        if (customer.getAuthorities().isEmpty()){// authRequest.getRoles().isEmpty()) {
             logger.info("PAs de ROLE TROUVE.. On S'EN Occupe.. :\t\r\n");
             //creation de la collection
             Collection<Role> roleCoellectionCustomer = new ArrayList<Role>();//new Role(3L);
@@ -130,11 +138,12 @@ public class UserServiceImpl implements UserService {
                 throw new NonExistentRoleException();
             }
             roleCoellectionCustomer.add(roleCustomer.get());
-            authRequest.setRoles(roleCoellectionCustomer);
+            customer.setRoles(roleCoellectionCustomer);
+            // authRequest.setRoles(roleCoellectionCustomer);
             roleCollectionValidate.add(roleCustomer.get());
         }else{
             // gestion des roles
-            Collection<Role> roleCollection = authRequest.getRoles();
+            Collection<Role> roleCollection = (Collection<Role>) customer.getAuthorities(); // authRequest.getRoles();
 
             // Obtention d'un itérateur pour la collection
             Iterator<Role> it = roleCollection.iterator();
@@ -142,35 +151,33 @@ public class UserServiceImpl implements UserService {
 
             // Utilisation de l'itérateur pour parcourir la collection
             logger.info("AFFICHONS LES ROLES TROUVES :\t\r\n");
-            logger.info("il y en a normalement : " + authRequest.getRoles().size());
+            logger.info("il y en a normalement : " +customer.getAuthorities().size()); // authRequest.getRoles().size());
             while (it.hasNext()) {
                 Role element = it.next();
                 //saving...
-                logger.info("un role detecté hein : " + element.toString());
+                logger.info("un role detecté, voila son ID >> : " + element.toString());
 
-                roleCollectionValidate.add(retrieveRole(element.getId()));
-                System.out.println(element);
+                logger.info("essayons de le recuperer franchement / ");
+
+                Optional<Role> roleCustomer = roleDao.findById(element.getId());
+                if (!roleCustomer.isPresent()){
+                    throw new NonExistentRoleException();
+                }
+                Role roleValidate = roleCustomer.get();
+                logger.info("voila le role recupeéré : "+roleValidate.toString());
+                logger.info("il est donc ajouté à la collection ");
+                roleCollectionValidate.add( roleValidate);
+
             }
         }
         if (!roleCollectionValidate.isEmpty()){
+            logger.info("Ajout des roles mis a jout pour le custimer ...");
             owner.setRoles(roleCollectionValidate);
         }
 
-
-        //partie Role ?
-
-
-
-
-
-
-        //owner.setAccountClosingDate(authRequest.getAccountClosingDate());
-       // owner.setAddresse(authRequest.getAddress());
-
-
-        //owner.getAddress(authRequest.getAddress());
-
+        logger.info(" avant inzertuin en base quelles intformation avaons nous pour le customer ? : "+owner.toString() );
         customerDao.save(owner); // ownerDao.save(owner);
+        logger.info(" le client apres insert supposé OK  :  "+owner.toString());
        // customerDao.save(owner); // ownerDao.save(owner);
         return owner;
     }
@@ -203,10 +210,20 @@ public class UserServiceImpl implements UserService {
                 .signWith(SignatureAlgorithm.HS512, signingKey).compact();
     }
 
+    // ??
+
+
     @Override
     public UserDetails getUserFromJwt(String jwt) {
+        logger.info(">>on  entre  dans [UserServiceImpl > getUserFromJwt]");
         String username = getUsernameFromToken(jwt);
-        return loadUserByUsername(username);
+
+       // String email = getUsernameFromToken(jwt);
+      //  logger.info(">> [UserServiceImpl > getUserFromJwt] recuêration du mail : "+email);
+        logger.info(">> [UserServiceImpl > getUserFromJwt] recuêration du mail : "+username);
+
+//        return loadUserByUsername(email);
+         return loadUserByUsername(username);
     }
 
     @Override
@@ -229,7 +246,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //Owner owner = ownerDao.findByLogin(username);
-        Customer owner = customerDao.findCustomerByEmail(username);
+        Customer owner = customerDao.findCustomerByUsername(username);
         if (owner == null) {
             throw new UsernameNotFoundException("Le propriétaire n'a pas été trouvé.");
         }

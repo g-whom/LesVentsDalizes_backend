@@ -30,7 +30,8 @@ public class Customer implements UserDetails {
     private String name;
    // @NotNull(message = "le prénom doit etre renseigné")
     //@NotEmpty(message = "le prénom doit etre renseigné")
-    @Column(name = "surname")
+    @Column
+            (name = "surname")
     private String surname;
     @Column(name = "birthdate")
     private LocalDate birthdate;
@@ -41,13 +42,14 @@ public class Customer implements UserDetails {
     /**
      *
      */
-    @Column(name = "email", unique = true)
-    @JsonIgnore
-    private String email;
+    //@Column(name = "email", unique = true)
+    @Column(name = "username",  unique = true)
+   // @JsonIgnore
+    private String username;
 
 
     @Column(name = "password")
-    @JsonIgnore
+    //@JsonIgnore
     private String password;
 
     //@NotNull(message = "le numéro de téléphone doit etre renseigné")
@@ -88,7 +90,8 @@ public class Customer implements UserDetails {
     private List<RequestPerform> requestPerformList = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Role> roles; // = new ArrayList<>();
+    private Collection<Role> roles = new ArrayList<>();
+
 
     /// CONSTRUCTOR ///
 
@@ -105,7 +108,7 @@ public class Customer implements UserDetails {
      * @param name name of the customer
      * @param surname lastname of the customer
      * @param birthdate
-     * @param email
+     * @param username
      * @param password
      * @param phoneNumber
      * @param accountClosingDate
@@ -120,13 +123,13 @@ public class Customer implements UserDetails {
 //        this.accountClosingDate = accountClosingDate;
 //    }
 
-    public Customer(Long id, String name, String surname, LocalDate birthdate, LocalDate subscriptionDate, String email, String password, String phoneNumber, LocalDate accountClosingDate, Address address) {
+    public Customer(Long id, String name, String surname, LocalDate birthdate, LocalDate subscriptionDate, String username, String password, String phoneNumber, LocalDate accountClosingDate, Address address) {
         this.id = id;
         setName(name); //this.name = name;
         setSurname(surname); //this.surname = surname;
         this.birthdate = birthdate;
         this.subscriptionDate = subscriptionDate;
-        setEmail(email); //this.email = email;
+        setUsername(username); //this.email = email;
         this.password = password;
         setPhoneNumber(phoneNumber); //this.phoneNumber = phoneNumber;
         this.accountClosingDate = accountClosingDate;
@@ -135,8 +138,8 @@ public class Customer implements UserDetails {
     }
 
 
-    public Customer(String email, String password) {
-        this.email = email;
+    public Customer(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
@@ -167,9 +170,9 @@ public class Customer implements UserDetails {
         return subscriptionDate;
     }
 
-    public String getEmail() {
-        return email;
-    }
+//    public String getUsername() {
+//        return username;
+//    }
 
 
 
@@ -187,7 +190,7 @@ public class Customer implements UserDetails {
     @Override
     public String getUsername() {
         //return null;
-        return email;
+        return username;
     }
 
     @Override
@@ -248,8 +251,8 @@ public class Customer implements UserDetails {
         this.subscriptionDate = subscriptionDate;
     }
 
-    public void setEmail(String mail) {
-        this.email = mail.trim();
+    public void setUsername(String mail) {
+        this.username = mail.trim();
     }
 
     public void setPassword(String password) {
@@ -280,6 +283,7 @@ public class Customer implements UserDetails {
     /// TOSTRING ///
 
 
+
     @Override
     public String toString() {
         return "Customer{" +
@@ -288,11 +292,13 @@ public class Customer implements UserDetails {
                 ", surname='" + surname + '\'' +
                 ", birthdate=" + birthdate +
                 ", subscriptionDate=" + subscriptionDate +
-                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", accountClosingDate=" + accountClosingDate +
-                ", addresse=" + address.toString() +
+                ", address=" + address.toString() +
+                ", roles=" + roles.toString() +
                 '}';
     }
+
 }

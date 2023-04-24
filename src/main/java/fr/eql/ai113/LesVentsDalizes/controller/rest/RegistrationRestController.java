@@ -137,7 +137,7 @@ public class RegistrationRestController  {
 
          */
 
-        if (registrationService.checkIfLoginAvailable(customer.getEmail() )!=null ){
+        if (registrationService.checkIfLoginAvailable(customer.getUsername() )!=null ){
             return ResponseEntity.badRequest().body("il semblerait que ce compte soit déjà dans notre systeme");
         }
 

@@ -31,7 +31,7 @@ public class RegistrationServiceImpl implements RegistrationService {
        // return  customerDao.existsByEmail(email);
         //return false;
         //return customerDao.existsByEmail(email) == null ? false : true;
-        return customerDao.findCustomerByEmail(email);
+        return customerDao.findCustomerByUsername(email);
     }
 
     @Override
