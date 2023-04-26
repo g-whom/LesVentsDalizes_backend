@@ -3,6 +3,7 @@ package fr.eql.ai113.LesVentsDalizes.security;
 import fr.eql.ai113.LesVentsDalizes.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,7 +31,6 @@ public class SecurityFilter extends OncePerRequestFilter {
         try {
             logger.info("\r\n >>>>>>>>> 1/5 [SecurityFilter > doFilterInternal]BEFORE : Voici la valeur de la requette HHTP > doFilterInternal : " +request.toString());
            String token = extractTokenFromHeader(request);
-            logger.info("\r\n >>>>>>>>> 2/5 [SecurityFilter > doFilterInternal]BEFORE : Voici la valeur du token : "+token.toString());
             logger.info("\r\n >>>>>>>>> 2+/5 [SecurityFilter > doFilterInternal]BEFORE : Voici la valeur du token : "+token);
 
             //WIP : controle ephemere
@@ -66,6 +66,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     /// SETTERS ///
 
+    @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }

@@ -6,4 +6,5 @@ package fr.eql.ai113.LesVentsDalizes.service;
 public interface ConnexionService {
 
 
+
 }

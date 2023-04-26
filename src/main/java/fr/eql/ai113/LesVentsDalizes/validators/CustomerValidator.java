@@ -22,7 +22,7 @@ public class CustomerValidator implements Validator {
     PasswordValidator passwordValidator;
     @Override
     public boolean supports(Class<?> clazz) {
-       return Member.class.equals(clazz) || Customer.class.equals(clazz);
+       return Member.class.equals(clazz) || Customer.class.equals(clazz) ;
     }
 
     @Override

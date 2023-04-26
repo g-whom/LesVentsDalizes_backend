@@ -33,7 +33,7 @@
 INSERT INTO `addresses` (`id`, `number_road`,`road`,`zip_code`,`city`,`country`)  VALUES ('1','24','rue de monopoly','92300','Monrouges','FRANCE');
 
 -- customer pour tester au moins une demande
-INSERT INTO `customers` (`id`, `name`, `surname`,`birthdate`,`subscription_date`,`username`,`password`,`phone_number`, `account_closing_date`, `address_id`, `dtype` ) VALUES ('1','jeje','rom','1987-12-03',NULL, 'jeje@whum.com','none', '0607',NULL, '1', 'Customer');
+INSERT INTO `customers` (`id`, `name`, `surname`,`birthdate`,`subscription_date`,`username`,`password`,`phone_number`, `account_closing_date`, `address_id`, `dtype` ) VALUES ('1','jeje','rom','1987-12-03',NULL, 'jeje@whum.com','$2y$10$tqDGW6ZFgXISoy2oq3IKZu1qzlk4ZEc5MBXjB3XITk4SsVUjLehZi', '0607',NULL, '1', 'Customer');
 --INSERT INTO `customers` (`id`, `name`, `surname`,`birthdate`,`subscription_date`,`username`,`password`,`phone_number`, `account_closing_date`- ) VALUES ('1','jeje','rom',NOW(),NULL, 'jeje@whum.com','none', '0607',NULL);
 
 
@@ -318,7 +318,7 @@ INSERT INTO `instruments` (`id`,`label`,`description`,`available` ,`category_ins
   insert into `customers` (`name`, `surname`, `birthdate`, `subscription_date`, `username`, `password`, `phone_number`, `account_closing_date`, `address_id`, `dtype`) values ('Audrey', 'cops', '1957-09-30', '2022-12-17', 'audrey@cop.com', '$2y$10$oUFvvM4MLkVKgZgWKdAOnuvqjbOGZVcCxD6KV7DdcXZdysoCvLlYW', '+7 (898) 598-7146', null, 1, 'Customer');
 --
 -- insert into `customers` (`id`, `name`, `surname`, `birthdate`, `subscription_date`, `username`, `password`, `phone_number`, `account_closing_date`, `address_id`, `dtype`) values (41, 'Selig', 'Kilday', '1957-09-29', '2022-02-02', 'skilday13@squidoo.com', 'eyQHlVYUI', '+420 (172) 949-5015', null, 7, 'Customer');
--
+
 --
 --
 --

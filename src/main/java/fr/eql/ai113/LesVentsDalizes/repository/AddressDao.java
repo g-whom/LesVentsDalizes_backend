@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AddressDao extends JpaRepository<Address, Integer> {
+public interface AddressDao extends JpaRepository<Address, Long> {
 
     Address save(Address address);
 
@@ -26,6 +26,8 @@ public interface AddressDao extends JpaRepository<Address, Integer> {
 
     //@Query("SELECT a FROM Address a  WHERE a.numberRoad =:#{address.numberRoad}  AND a.road =:#{address.road}  AND a.city =:#{address.city}  AND a.zipCode =:#{address.zipCode} AND a.country =:#{address.country}")
     Address findAddressByNumberRoadAndRoadAndCityAndCountryAndZipCode(String numberRoad, String road, String City, String Country, String zipCod);
+
+
 
 
 

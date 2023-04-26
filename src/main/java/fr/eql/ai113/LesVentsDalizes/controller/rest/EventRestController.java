@@ -1,7 +1,6 @@
 package fr.eql.ai113.LesVentsDalizes.controller.rest;
 
 import fr.eql.ai113.LesVentsDalizes.entity.Event;
-import fr.eql.ai113.LesVentsDalizes.entity.Response;
 import fr.eql.ai113.LesVentsDalizes.service.RequestManagmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-/*
-@RestController
-@RequestMapping("security")
-@CrossOrigin(origins = "${front.url}")
- */
+
 
 @RestController
 @RequestMapping("events")
@@ -30,7 +25,7 @@ public class EventRestController {
     //WIP
 
     @GetMapping("/show/all")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    //@PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<?> retrieveEvents(){
         /*
         Dans postMan : http://localhost:8097/events/show/all
