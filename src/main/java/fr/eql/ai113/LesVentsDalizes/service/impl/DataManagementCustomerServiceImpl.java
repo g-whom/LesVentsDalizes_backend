@@ -3,6 +3,7 @@ package fr.eql.ai113.LesVentsDalizes.service.impl;
 import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.PasswordDto;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.UsernameDto;
 import fr.eql.ai113.LesVentsDalizes.exceptions.AddressExistException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentAddressException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
@@ -248,6 +249,23 @@ public class DataManagementCustomerServiceImpl implements DataManagementCustomer
         }catch (Exception e){
             throw new Exception(""+e);
         }
+    }
+
+    //
+    @Override
+    public Customer updateCustomerUsername(UsernameDto usernameDto) throws NonExistentCustomerException, Exception{
+        try {
+            Customer customerToUpdate = customerDao.findCustomerByUsername(usernameDto.getUsername().trim());
+            if (customerToUpdate==null){
+                throw new NonExistentCustomerException("");
+            }
+            customerToUpdate.setUsername(usernameDto.getUsernameNew().trim());
+            return customerDao.save(customerToUpdate);
+
+        }catch (Exception e){
+            throw new Exception("");
+        }
+
     }
 
 

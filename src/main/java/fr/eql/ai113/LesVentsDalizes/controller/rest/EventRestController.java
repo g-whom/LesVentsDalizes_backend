@@ -28,7 +28,8 @@ public class EventRestController {
     //@PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<?> retrieveEvents(){
         /*
-        Dans postMan : http://localhost:8097/events/show/all
+        Dans postMan :
+
          */
 
         List<Event> eventList = new ArrayList<>();

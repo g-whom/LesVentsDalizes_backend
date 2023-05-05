@@ -3,12 +3,14 @@ package fr.eql.ai113.LesVentsDalizes.controller.rest;
 import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.PasswordDto;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.UsernameDto;
 import fr.eql.ai113.LesVentsDalizes.exceptions.AddressExistException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentAddressException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.ValidPasswordException;
 import fr.eql.ai113.LesVentsDalizes.service.DataManagementCustomerService;
 import fr.eql.ai113.LesVentsDalizes.service.RegistrationService;
+import fr.eql.ai113.LesVentsDalizes.validators.EmailValidator;
 import fr.eql.ai113.LesVentsDalizes.validators.PasswordValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +34,7 @@ public class DataManagmentCustomerRestController {
     RegistrationService registrationService;
 
     private PasswordValidator passwordValidator;
+    private EmailValidator emailValidator;
 
   //   Consultation des information du customer | member
 
@@ -269,6 +272,55 @@ public class DataManagmentCustomerRestController {
 
 
 
+    @PostMapping("update/username/customer")
+    public ResponseEntity<?> updateUsernameCustomer(@RequestBody UsernameDto usernameDto , BindingResult result){
+
+        logger.info("tcehck UsernameDto:  ");
+
+        /*
+        Posstman:       http://localhost:8097/customers/update/username/customer
+
+
+        -----  OLD :
+        audrey@cop.com
+
+        eR3#£_\éé
+
+        -----  NEW :
+        elodie@doudou.com
+
+
+        {
+            "username": "audrey@cop.com",
+            "usernameNew": "elodie@doudou.com"
+        }
+
+         */
+
+        Customer customerForCheckEmail = new Customer();
+        customerForCheckEmail.setUsername(usernameDto.getUsername().trim());
+        emailValidator.validate(customerForCheckEmail, result);
+        if(result.hasErrors()){
+            List<String> errors = new ArrayList<>();
+            for (ObjectError error : result.getAllErrors()) {
+                errors.add(error.getDefaultMessage()+"\r");
+            }
+            logger.info(" Le nouveaux username (mail) est invalide : "+errors);
+            return ResponseEntity.badRequest().body(""+errors);
+        }
+
+        try {
+            Customer customerUpdate = dataManagementCustomerService.updateCustomerUsername(usernameDto);
+            return ResponseEntity.ok(customerUpdate);
+        }catch (NonExistentCustomerException e){
+            logger.info("Une anomalie s'est produite : Customer introuvable");
+            return ResponseEntity.badRequest().body(""+e);
+        }catch (Exception e){
+            logger.info("Une anomalie s'est produite en base de donnée : "+ e);
+            return ResponseEntity.badRequest().body(""+e);
+        }
+
+    }
 
     /// SETTERS ///
 
@@ -285,5 +337,10 @@ public class DataManagmentCustomerRestController {
     @Autowired
     public void setPasswordValidator(PasswordValidator passwordValidator) {
         this.passwordValidator = passwordValidator;
+    }
+
+    @Autowired
+    public void setEmailValidator(EmailValidator emailValidator) {
+        this.emailValidator = emailValidator;
     }
 }

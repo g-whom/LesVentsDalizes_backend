@@ -3,6 +3,7 @@ package fr.eql.ai113.LesVentsDalizes.service;
 import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.PasswordDto;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.UsernameDto;
 import fr.eql.ai113.LesVentsDalizes.exceptions.AddressExistException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentAddressException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
@@ -46,5 +47,7 @@ public interface DataManagementCustomerService {
 
 
     Customer updatePasswordCustomer(PasswordDto passwordDto) throws NonExistentCustomerException, Exception;
+
+    Customer updateCustomerUsername(UsernameDto usernameDto) throws NonExistentCustomerException, Exception;
 
 }
