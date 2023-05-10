@@ -2,6 +2,8 @@ package fr.eql.ai113.LesVentsDalizes.controller.rest;
 
 import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.AddressDto;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.AddressWithUsernameDto;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.PasswordDto;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.UsernameDto;
 import fr.eql.ai113.LesVentsDalizes.exceptions.AddressExistException;
@@ -15,11 +17,13 @@ import fr.eql.ai113.LesVentsDalizes.validators.PasswordValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +61,102 @@ public class DataManagmentCustomerRestController {
         }
     }
 
+
+    /**
+     * <h3>This method tries to find an address in the system according to the id of the client.<br/>
+     * The address is returned if it is found.</h3>
+     *
+     * @param idCustomer
+     * @return address found or Null
+     * @throws NonExistentCustomerException
+     * @throws NonExistentAddressException
+     * @throws DataAccessException
+     * @throws PersistenceException
+     *
+     * @Author : J.Vent
+     */
+    @GetMapping ("/search/address/customer/{idCustomer}")
+    public ResponseEntity<?> retrieveAddressCustomerFromUsername(@PathVariable Long idCustomer){
+    /* POSTMAN
+
+       /* Sur POSTMAN
+
+        url : http://localhost:8097/customers/search/address/customer
+
+        {
+            "username":"jeje@whum.com",
+        }
+
+    */
+
+
+
+        // VAlidation des données
+
+        try{
+            Address addressFound = dataManagementCustomerService.findAddressCustomerFromIdCustomer(idCustomer);
+            return ResponseEntity.ok(addressFound);
+        }catch (NonExistentCustomerException e){
+            return ResponseEntity.badRequest().body("");
+        }catch (NonExistentAddressException e){
+            return ResponseEntity.badRequest().body("");
+        }catch (DataAccessException e){
+            return ResponseEntity.badRequest().body("");
+        }catch (PersistenceException e){
+            return ResponseEntity.badRequest().body("");
+        }
+    }
+
+
+    // WIP javadoc  + validation des champs del'adresse
+
+    @PostMapping("/update/address/customer")
+    public ResponseEntity<?> updateCustomerAddressFromUsername(
+           @RequestBody AddressWithUsernameDto addressWithUsernameDto){
+
+        logger.info(">>> ####On est au moins rentré dans updateCustomerAdrdressFromUsername");
+        logger.info("View of Json to Objet : "+addressWithUsernameDto.toString());
+
+    /* Sur POSTMAN
+
+        url : http://localhost:8097/customers/update/address/customer
+
+        {
+            "username":"??",
+            "addressDto" :
+            {
+                "numberRoad": "??",
+                "road":"??",
+                "zipCode":"??",
+                "city":"??",
+                "country": "??"
+            }
+        }
+
+    */
+
+
+    // Validation des données
+        try{
+            Address addressDtoUpdated =
+                    dataManagementCustomerService.updateAddressCustomerFromUsername(addressWithUsernameDto);
+            return ResponseEntity.ok(addressDtoUpdated);
+        }catch (NonExistentCustomerException e){
+            logger.info("Le customer ayant l''username {} n'est" +
+                    " pas présent dans le system", addressWithUsernameDto.getUsername());
+            return ResponseEntity.badRequest().body("");
+        }catch (DataAccessException e){
+            logger.info("La base de données semble inacesible");
+            return ResponseEntity.badRequest().body("");
+        }catch (PersistenceException e){
+            logger.info("Une erreur s'est produite lors de l'enregistrement" +
+                    " de la nouvelle adresse du customer");
+            return ResponseEntity.badRequest().body("");
+        }
+        //    }
+
+
+    }
 
 
     @GetMapping("/search/username/{usernameCustomer}")

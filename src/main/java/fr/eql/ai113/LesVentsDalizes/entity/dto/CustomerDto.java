@@ -145,7 +145,7 @@ public class CustomerDto {
 
 
         //For RequestPerform
-        if (customerDto.getRequestsPerformIds().trim() != null){
+ /*       if (customerDto.getRequestsPerformIds().trim() != null){
             String[] idsRequestsPerform = customerDto.getRequestsPerformIds().trim().split(",");
 
             List<RequestPerform> requestPerformList = new ArrayList<>();
@@ -158,7 +158,7 @@ public class CustomerDto {
 
             customer.setRequestPerformList(requestPerformList);
         }
-
+*/
         return customer;
 
     }

@@ -2,6 +2,8 @@ package fr.eql.ai113.LesVentsDalizes.service.impl;
 
 import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.AddressDto;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.AddressWithUsernameDto;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.PasswordDto;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.UsernameDto;
 import fr.eql.ai113.LesVentsDalizes.exceptions.AddressExistException;
@@ -15,11 +17,14 @@ import fr.eql.ai113.LesVentsDalizes.validators.PasswordValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
+import javax.persistence.PersistenceException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -208,12 +213,14 @@ public class DataManagementCustomerServiceImpl implements DataManagementCustomer
                 throw new NonExistentCustomerException("");
             }
 
-            Address addressToCheck = addressDao.findAddressByNumberRoadAndRoadAndCityAndCountryAndZipCode(
+            Address addressToCheck = fetchAddress(address);
+                    /* OLD
+                    addressDao.findAddressByNumberRoadAndRoadAndCityAndCountryAndZipCode(
                     address.getNumberRoad(),
                     address.getRoad(),
                     address.getCity(),
                     address.getCountry(),
-                    address.getZipCode() );
+                    address.getZipCode() );*/
 
             Address addressUpdate = new Address();
 
@@ -274,6 +281,115 @@ public class DataManagementCustomerServiceImpl implements DataManagementCustomer
 
     }
 
+
+    /**
+     * <H2>this method updates the customer's address if it differs from the existing one</H2>
+     *
+     * <hr>
+     * <ul> methods used :
+     *     <li>{@link #fetchAddress(Address)}</li>
+     * </ul>
+     * <hr>
+     *
+     * @param addressWithUsernameDto - object which includes an address and a customer's username
+     * @return Address - corresponds to the last address to be associated to the user
+     * (whether it has been updated or not
+     * @throws NonExistentCustomerException
+     * @throws DataAccessException
+     * @throws PersistenceException
+     * @see
+     * @Author: J.Vent
+     */
+    @Override
+    public Address updateAddressCustomerFromUsername(AddressWithUsernameDto addressWithUsernameDto) throws
+            NonExistentCustomerException,
+            DataAccessException,
+            PersistenceException{
+
+        try{
+
+            Customer customer = customerDao.findCustomerByUsername(addressWithUsernameDto.getUsername().trim());
+            if(customer==null){
+                logger.info("Oups : l'identifiant {} est inconnu dans le systeme - Customer inexistant", addressWithUsernameDto.getUsername());
+                throw new NonExistentCustomerException("");
+            }
+
+            Address addressFound = fetchAddress(addressWithUsernameDto.getAddressDto().convertAddressDtoToAdress());
+
+            if (addressFound != null){
+                return addressFound;
+            }
+
+            Address addressUpdated = addressDao.save(addressWithUsernameDto.getAddressDto().convertAddressDtoToAdress());
+            return addressUpdated;
+
+        }catch (DataAccessException e){
+            logger.info("La base de données semble inaxecible");
+            throw new DataAccessException("") {};
+        }catch (PersistenceException e){
+            logger.info("Une erreur s'est produite lors de l'enregistrement de la nouvelle adresse du customer");
+            throw new PersistenceException("");
+        }
+        //return null;
+    }
+
+
+
+    @Override
+    public Address findAddressCustomerFromIdCustomer(Long idCustomer) throws
+            NonExistentCustomerException,
+            NonExistentAddressException,
+            DataAccessException,
+            PersistenceException{
+        try {
+            Customer customer = customerDao.findCustomerById(idCustomer);
+            if(customer==null){
+                logger.info("Oups !! l'id :  {} est inconnu dans le systeme - Customer inexistant", idCustomer);
+                throw new NonExistentCustomerException("");
+            }
+
+            Optional<Address> addressFound = addressDao.findById(customer.getAddress().getId());
+            if (addressFound.isPresent()){
+                return addressFound.get();
+            }
+            throw new NonExistentAddressException();
+        }catch (DataAccessException e){
+            logger.info("La base de données semble inaxecible");
+            throw new DataAccessException("") {};
+        }catch (PersistenceException e){
+            logger.info("Une erreur s'est produite lors de l'enregistrement de la nouvelle adresse du customer");
+            throw new PersistenceException("");
+        }
+
+    }
+
+
+    /**
+     * This method returns the searched address or null otherwise
+     *
+     * <hr/>
+     * <ul>
+     *     <p>Here are the methods that use it</p>
+     *     <li>{@link  #updateAddressCustomer(Address address, Long idCustomer)}</li>
+     *     <li>{@link #updateAddressCustomerFromUsername(AddressWithUsernameDto addressWithUsernameDto) }</li>
+     * </ul>
+     * <hr/>
+     *
+     * @param address - corresponds to an address object, the id of the address is not used
+     * @return Address - matches the target address in the database if found otherwise null
+     * @Author : J.Vent
+     */
+    private Address fetchAddress(Address address){
+
+        Address addressFound = addressDao.findAddressByNumberRoadAndRoadAndCityAndCountryAndZipCode(
+                address.getNumberRoad().trim(),
+                address.getRoad().trim(),
+                address.getCity().trim(),
+                address.getCountry().trim(),
+                address.getZipCode().trim() );
+
+        return addressFound;
+    }
 
     /// SETTERS ///
 

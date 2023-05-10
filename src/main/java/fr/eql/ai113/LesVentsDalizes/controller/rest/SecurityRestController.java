@@ -60,6 +60,7 @@ public class SecurityRestController {
             logger.info(">>> [authorize] avons nous le owwner ok ? : "+owner);
             String token = userService.generateJwtForUser(owner);
             logger.info(">>> [authorize] le token est : "+token);
+            logger.info("affichons l'owner : ", owner.toString());
             return ResponseEntity.ok(new AuthResponse(owner, token));
 
 
