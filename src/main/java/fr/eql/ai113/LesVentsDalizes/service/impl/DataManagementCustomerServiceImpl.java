@@ -187,7 +187,7 @@ public class DataManagementCustomerServiceImpl implements DataManagementCustomer
     //WIP >>> Appliquer les validateuts ??
 
     /**
-     * WIP (translate : u^date adresse ok
+     * WIP (translate : update adresse ok si deja existante ne rien remplacer
      * @param address
      * @param idCustomer
      * @return
@@ -199,7 +199,8 @@ public class DataManagementCustomerServiceImpl implements DataManagementCustomer
     public Address updateAddressCustomer(Address address, Long idCustomer) throws
             NonExistentCustomerException,
             AddressExistException,
-            Exception{
+            Exception
+    {
 
         try {
             Customer customerToCheck = customerDao.findCustomerById(idCustomer);
@@ -214,10 +215,15 @@ public class DataManagementCustomerServiceImpl implements DataManagementCustomer
                     address.getCountry(),
                     address.getZipCode() );
 
+            Address addressUpdate = new Address();
+
             if (addressToCheck != null)  {
-                throw new AddressExistException();
+                addressUpdate = addressToCheck;
+                //new AddressExistException();
+            }else{
+                addressUpdate = addressDao.save(address);
             }
-            Address addressUpdate = addressDao.save(address);
+
             customerToCheck.setAddress(addressUpdate);
             customerDao.save(customerToCheck);
             return addressUpdate;

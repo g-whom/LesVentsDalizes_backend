@@ -83,7 +83,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // Points publics
                 .antMatchers("/security/**").permitAll()
-                .antMatchers("/customers/**").permitAll()
+                .antMatchers("/customers/**").hasRole("USER") //.permitAll()
                 //.antMatchers("/events/**").permitAll()
                 .antMatchers("/events/**").hasRole("USER")
                 .anyRequest().authenticated() ;//BONUS

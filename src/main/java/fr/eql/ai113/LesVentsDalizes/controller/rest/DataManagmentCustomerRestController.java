@@ -160,7 +160,7 @@ public class DataManagmentCustomerRestController {
 
     //suppréssion du compte du customer | member
 
-    // WIP
+    // WIP (exception AddressExistException plus utilie)
     @PutMapping("/new/address/customer/{idCustomer}")
     public ResponseEntity<?> updateAddressCustomer(@PathVariable Long idCustomer, @RequestBody Address address){
 

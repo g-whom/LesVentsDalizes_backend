@@ -314,7 +314,7 @@ INSERT INTO `instruments` (`id`,`label`,`description`,`available` ,`category_ins
 -- insert into `customers` (`name`, `surname`, `birthdate`, `subscription_date`, `username`, `password`, `phone_number`, `account_closing_date`, `address_id`, `dtype`, `date_of_membership`, `registration_fee`, `up_to_date`, `customer_becoming_member`) values ('Fiona', 'Cockitt', '1957-09-30', '2022-12-17', 'fcockitt1m@cafepress.com', 'gYXpUv', '+7 (898) 598-7146', null, 52, 'member', '2022-08-04', 50, true, false);
 
 
--- CUSTOMMER password: eR3#£_\éé
+-- CUSTOMMER password: eR3#£_\éé    eEé__+°)\\ tom@brady.com
   insert into `customers` (`name`, `surname`, `birthdate`, `subscription_date`, `username`, `password`, `phone_number`, `account_closing_date`, `address_id`, `dtype`) values ('Audrey', 'cops', '1957-09-30', '2022-12-17', 'audrey@cop.com', '$2y$10$oUFvvM4MLkVKgZgWKdAOnuvqjbOGZVcCxD6KV7DdcXZdysoCvLlYW', '+7 (898) 598-7146', null, 1, 'Customer');
 --
 -- insert into `customers` (`id`, `name`, `surname`, `birthdate`, `subscription_date`, `username`, `password`, `phone_number`, `account_closing_date`, `address_id`, `dtype`) values (41, 'Selig', 'Kilday', '1957-09-29', '2022-02-02', 'skilday13@squidoo.com', 'eyQHlVYUI', '+420 (172) 949-5015', null, 7, 'Customer');

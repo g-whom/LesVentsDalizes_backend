@@ -229,6 +229,10 @@ public class Customer implements UserDetails {
         return address;
     }
 
+    public List<RequestPerform> getRequestPerformList() {
+        return requestPerformList;
+    }
+
     /// SETTERS ///
 
     public void setId(Long id) {
@@ -274,6 +278,10 @@ public class Customer implements UserDetails {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }
+
+    public void setRequestPerformList(List<RequestPerform> requestPerformList) {
+        this.requestPerformList = requestPerformList;
     }
 
     /// HASHCODE ///
