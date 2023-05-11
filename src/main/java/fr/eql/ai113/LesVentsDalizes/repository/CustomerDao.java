@@ -36,19 +36,15 @@ public interface CustomerDao extends JpaRepository<Customer, Long> {
 
 
     /**
-     * this method will update the client's address, by associating the right address id known by the system
+     * this method will update the client's address, by associating the right address known by the system
      * @param customerId
-     * @param addressId
+     * @param address
+     *
+     *  @Author: J.Vent
      */
     @Modifying
     @Query("UPDATE Customer c SET c.address = :address WHERE c.id = :customerId" )
     void updateCustomerIdAddress(Long customerId, Address address);
-    /*
-    @Modifying
-    @Query("UPDATE User u SET u.name = :newName WHERE u.id = :userId")
-    void updateUserName(Long userId, String newName);
-     */
-
 
 
 }

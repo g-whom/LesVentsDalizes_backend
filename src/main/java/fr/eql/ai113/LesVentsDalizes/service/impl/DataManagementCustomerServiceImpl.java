@@ -312,7 +312,8 @@ public class DataManagementCustomerServiceImpl implements DataManagementCustomer
 
             Customer customer = customerDao.findCustomerByUsername(addressWithUsernameDto.getUsername().trim());
             if(customer==null){
-                logger.info("Oups : l'identifiant {} est inconnu dans le systeme - Customer inexistant", addressWithUsernameDto.getUsername());
+                logger.info("Oups : l'identifiant {} est inconnu dans le systeme -" +
+                        " Customer inexistant", addressWithUsernameDto.getUsername());
                 throw new NonExistentCustomerException("");
             }
 

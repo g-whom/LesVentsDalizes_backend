@@ -56,7 +56,9 @@ public interface DataManagementCustomerService {
     Customer updateCustomerUsername(UsernameDto usernameDto) throws NonExistentCustomerException, Exception;
 
     Address updateAddressCustomerFromUsername(AddressWithUsernameDto addressWithUsernameDto) throws
-            NonExistentCustomerException, DataAccessException, PersistenceException;
+            NonExistentCustomerException,
+            DataAccessException,
+            PersistenceException;
 
     Address findAddressCustomerFromIdCustomer(Long idCustomer) throws
             NonExistentCustomerException,
