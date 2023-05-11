@@ -47,7 +47,7 @@ public class AddressWithUsernameDto {
     public String toString() {
         return "AddressWithUsernameDto{" +
                 "username='" + username + '\'' +
-                ", addressDto=" + addressDto.toString() +
+                ", addressDto=" + addressDto+
                 '}';
     }
 }

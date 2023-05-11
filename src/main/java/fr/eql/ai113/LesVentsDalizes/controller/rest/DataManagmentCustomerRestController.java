@@ -115,7 +115,12 @@ public class DataManagmentCustomerRestController {
            @RequestBody AddressWithUsernameDto addressWithUsernameDto){
 
         logger.info(">>> ####On est au moins rentré dans updateCustomerAdrdressFromUsername");
-        logger.info("View of Json to Objet : "+addressWithUsernameDto.toString());
+        //logger.info("View of Json to Objet : "+addressWithUsernameDto.toString());
+        logger.info("controle du parametre de la methode . !!");
+        logger.info("View of Json to (adresseDTO) : "+addressWithUsernameDto.getAddressDto());
+        logger.info("View of Json to Objet (mail) : "+addressWithUsernameDto.getUsername());
+        logger.info("View of Json to Objet (Rue) : "+addressWithUsernameDto.getAddressDto().getRoad());
+        logger.info("                           - - - - - - - - - -");
 
     /* Sur POSTMAN
 
@@ -123,7 +128,8 @@ public class DataManagmentCustomerRestController {
 
         {
             "username":"??",
-            "addressDto" :
+            "
+            " :
             {
                 "numberRoad": "??",
                 "road":"??",

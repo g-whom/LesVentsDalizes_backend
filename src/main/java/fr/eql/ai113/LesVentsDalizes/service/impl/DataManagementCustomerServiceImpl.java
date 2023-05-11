@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
@@ -300,6 +301,7 @@ public class DataManagementCustomerServiceImpl implements DataManagementCustomer
      * @see
      * @Author: J.Vent
      */
+    @Transactional
     @Override
     public Address updateAddressCustomerFromUsername(AddressWithUsernameDto addressWithUsernameDto) throws
             NonExistentCustomerException,
@@ -321,10 +323,12 @@ public class DataManagementCustomerServiceImpl implements DataManagementCustomer
             }
 
             Address addressUpdated = addressDao.save(addressWithUsernameDto.getAddressDto().convertAddressDtoToAdress());
+            customerDao.updateCustomerIdAddress(customer.getId(), addressUpdated);
+
             return addressUpdated;
 
         }catch (DataAccessException e){
-            logger.info("La base de données semble inaxecible");
+            logger.info("La base de données semble inaxecible (couche service) : "+e);
             throw new DataAccessException("") {};
         }catch (PersistenceException e){
             logger.info("Une erreur s'est produite lors de l'enregistrement de la nouvelle adresse du customer");

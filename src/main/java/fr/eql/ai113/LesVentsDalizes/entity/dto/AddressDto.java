@@ -99,6 +99,31 @@ public class AddressDto {
 
     /// SETTERS ///
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNumberRoad(String numberRoad) {
+        this.numberRoad = numberRoad;
+    }
+
+    public void setRoad(String road) {
+        this.road = road;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+
     /// TOSTRING ///
 
     @Override
