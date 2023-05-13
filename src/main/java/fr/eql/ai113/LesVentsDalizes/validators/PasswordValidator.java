@@ -2,6 +2,7 @@ package fr.eql.ai113.LesVentsDalizes.validators;
 
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
 import fr.eql.ai113.LesVentsDalizes.entity.Member;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.AddressWithUsernameDto;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.PasswordDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,10 +50,13 @@ public class PasswordValidator implements Validator {
                 PasswordDto passwordDto = (PasswordDto) target;
                 validatePassword(passwordDto.getPasswordNew().trim(),errors);
                 validatePassword(passwordDto.getPasswordNewBis().trim(),errors);
-                //validatePassword(passwordDto.getPassword().trim(),errors);
+                //
+                // validatePassword(passwordDto.getPassword().trim(),errors);
                 isIdenticalPassword(passwordDto.getPasswordNew(), passwordDto.getPasswordNewBis(), errors);
                 break;
-            default:  logger.info("Type d'objet non encore reconnu, (WIP: update EmailValidator)");
+            default:
+                logger.info("Type d'objet non encore reconnu, (WIP: update EmailValidator)");
+                errors.reject("typeMismatch", "La valeur récupérée n'est pas reconnue");
         }
 
     }

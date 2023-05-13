@@ -12,6 +12,8 @@ import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.ValidPasswordException;
 import fr.eql.ai113.LesVentsDalizes.service.DataManagementCustomerService;
 import fr.eql.ai113.LesVentsDalizes.service.RegistrationService;
+import fr.eql.ai113.LesVentsDalizes.validators.AddressDtoValidator;
+import fr.eql.ai113.LesVentsDalizes.validators.AddressWithUsernameDtoValidator;
 import fr.eql.ai113.LesVentsDalizes.validators.EmailValidator;
 import fr.eql.ai113.LesVentsDalizes.validators.PasswordValidator;
 import org.slf4j.Logger;
@@ -39,6 +41,8 @@ public class DataManagmentCustomerRestController {
 
     private PasswordValidator passwordValidator;
     private EmailValidator emailValidator;
+    private AddressDtoValidator addressDtoValidator;
+    private AddressWithUsernameDtoValidator addressWithUsernameDtoValidator;
 
   //   Consultation des information du customer | member
 
@@ -112,15 +116,7 @@ public class DataManagmentCustomerRestController {
 
     @PostMapping("/update/address/customer")
     public ResponseEntity<?> updateCustomerAddressFromUsername(
-           @RequestBody AddressWithUsernameDto addressWithUsernameDto){
-
-        logger.info(">>> ####On est au moins rentré dans updateCustomerAdrdressFromUsername");
-        //logger.info("View of Json to Objet : "+addressWithUsernameDto.toString());
-        logger.info("controle du parametre de la methode . !!");
-        logger.info("View of Json to (adresseDTO) : "+addressWithUsernameDto.getAddressDto());
-        logger.info("View of Json to Objet (mail) : "+addressWithUsernameDto.getUsername());
-        logger.info("View of Json to Objet (Rue) : "+addressWithUsernameDto.getAddressDto().getRoad());
-        logger.info("                           - - - - - - - - - -");
+           @RequestBody AddressWithUsernameDto addressWithUsernameDto, BindingResult result){
 
     /* Sur POSTMAN
 
@@ -142,7 +138,17 @@ public class DataManagmentCustomerRestController {
     */
 
 
-    // Validation des données
+        addressWithUsernameDtoValidator.validate(addressWithUsernameDto, result);
+        if (result.hasErrors()){
+            List<String>errors = new ArrayList<>();
+            for(ObjectError error : result.getAllErrors()){
+                errors.add(error.getDefaultMessage());
+            }
+            logger.info("les données associées à l'adresse ne sont pas valide : "+errors);
+            return ResponseEntity.badRequest().body("Une erreur est survenue !");
+        }
+
+
         try{
             Address addressDtoUpdated =
                     dataManagementCustomerService.updateAddressCustomerFromUsername(addressWithUsernameDto);
@@ -448,5 +454,15 @@ public class DataManagmentCustomerRestController {
     @Autowired
     public void setEmailValidator(EmailValidator emailValidator) {
         this.emailValidator = emailValidator;
+    }
+
+    @Autowired
+    public void setAddressDtoValidator(AddressDtoValidator addressDtoValidator) {
+        this.addressDtoValidator = addressDtoValidator;
+    }
+
+    @Autowired
+    public void setAddressWithUsernameDtoValidator(AddressWithUsernameDtoValidator addressWithUsernameDtoValidator) {
+        this.addressWithUsernameDtoValidator = addressWithUsernameDtoValidator;
     }
 }

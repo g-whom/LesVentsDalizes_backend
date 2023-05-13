@@ -17,9 +17,9 @@ import org.springframework.validation.Validator;
 public class CustomerValidator implements Validator {
 
     Logger logger = LoggerFactory.getLogger(getClass());
-    EmailValidator emailValidator;
+    private EmailValidator emailValidator;
 
-    PasswordValidator passwordValidator;
+    private PasswordValidator passwordValidator;
     @Override
     public boolean supports(Class<?> clazz) {
        return Member.class.equals(clazz) || Customer.class.equals(clazz) ;
