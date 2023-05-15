@@ -112,12 +112,15 @@ public class DataManagmentCustomerRestController {
     }
 
 
-    // WIP javadoc  + validation des champs del'adresse
-
+    /**
+     * This controller is used for operations related to the management of a client's address update
+     * @param addressWithUsernameDto
+     * @param result
+     * @return
+     */
     @PostMapping("/update/address/customer")
     public ResponseEntity<?> updateCustomerAddressFromUsername(
            @RequestBody AddressWithUsernameDto addressWithUsernameDto, BindingResult result){
-
     /* Sur POSTMAN
 
         url : http://localhost:8097/customers/update/address/customer
@@ -136,8 +139,6 @@ public class DataManagmentCustomerRestController {
         }
 
     */
-
-
         addressWithUsernameDtoValidator.validate(addressWithUsernameDto, result);
         if (result.hasErrors()){
             List<String>errors = new ArrayList<>();
@@ -147,8 +148,6 @@ public class DataManagmentCustomerRestController {
             logger.info("les données associées à l'adresse ne sont pas valide : "+errors);
             return ResponseEntity.badRequest().body("Une erreur est survenue !");
         }
-
-
         try{
             Address addressDtoUpdated =
                     dataManagementCustomerService.updateAddressCustomerFromUsername(addressWithUsernameDto);
@@ -165,9 +164,6 @@ public class DataManagmentCustomerRestController {
                     " de la nouvelle adresse du customer");
             return ResponseEntity.badRequest().body("");
         }
-        //    }
-
-
     }
 
 
