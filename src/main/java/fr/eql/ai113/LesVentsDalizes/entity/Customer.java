@@ -2,6 +2,8 @@ package fr.eql.ai113.LesVentsDalizes.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.CustomerConnectDto;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.CustomerDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -39,9 +41,6 @@ public class Customer implements UserDetails {
     @Column(name = "subscription_date")
     private LocalDate subscriptionDate;
 
-    /**
-     *
-     */
     //@Column(name = "email", unique = true)
     @Column(name = "username",  unique = true)
    // @JsonIgnore
@@ -55,7 +54,6 @@ public class Customer implements UserDetails {
     //@NotNull(message = "le numéro de téléphone doit etre renseigné")
     //@NotEmpty(message = "le numéro de téléphone doit etre renseigné")
     @Column(name = "phone_number")
-
     private String phoneNumber;
 
     @Column(name = "account_closing_date")
@@ -68,7 +66,6 @@ public class Customer implements UserDetails {
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
     private Address address;
-
 
 
 
@@ -144,6 +141,62 @@ public class Customer implements UserDetails {
     }
 
     /// FUNCTIONS ///
+
+    /**
+     * this method converts object 'customer' into 'customerDto' , concerning the related data
+     * (Roles and Addresses, RequestPerform) an eventual treatment will be applied according
+     * to the found identifiers.
+     *
+     * WIP for: RequestePerform
+     *
+     * @return customer
+     */
+    public CustomerDto convertCustomerToCustomerDtoWithoutPassword(){
+
+        CustomerDto customerDto= new CustomerDto();
+        if (this.getId() != null){
+            customerDto.setId(this.getId());
+        }
+        customerDto.setName(this.name);
+        customerDto.setSurname(this.surname);
+        customerDto.setUsername(this.username);
+        customerDto.setBirthdate(this.birthdate);
+        //customerDto.setPassword(this.password);/
+        //customerDto.setConfirmPassword(this.password);/
+        customerDto.setPhoneNumber(this.phoneNumber);
+        if (this.accountClosingDate != null){
+            customerDto.setAccountClosingDate(this.accountClosingDate);
+        }
+        //address
+        customerDto.setAddress(address);
+
+        //Role
+        if (this.roles != null){
+            customerDto.setRoles(this.getRoles());
+        }
+
+        return customerDto;
+    }
+
+
+    /**
+     * <h3>This method converts a "Customer" to a "customerConnectDto" for use in the front end</h3>
+     * @return
+     *
+     * @Author: J.VENT
+     */
+    public CustomerConnectDto convertCustomerToCustomerConnectDto(){
+        CustomerConnectDto customerConnectDto= new CustomerConnectDto();
+        if (this.getId() != null){
+            customerConnectDto.setId(this.getId());
+        }
+        customerConnectDto.setName(this.getName());
+        customerConnectDto.setSurname(this.getSurname());
+        customerConnectDto.setUsername(this.getUsername());
+        customerConnectDto.setRoles(this.getRoles());
+
+        return customerConnectDto;
+    }
 
     /// OVERIDE ///
 
@@ -229,8 +282,9 @@ public class Customer implements UserDetails {
         return address;
     }
 
-
-
+    public Collection<Role> getRoles() {
+        return roles;
+    }
     /// SETTERS ///
 
     public void setId(Long id) {
@@ -277,6 +331,8 @@ public class Customer implements UserDetails {
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
     }
+
+
 
     /// HASHCODE ///
 

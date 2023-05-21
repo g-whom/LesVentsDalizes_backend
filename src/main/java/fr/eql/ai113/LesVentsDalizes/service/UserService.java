@@ -3,7 +3,9 @@ package fr.eql.ai113.LesVentsDalizes.service;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
 import fr.eql.ai113.LesVentsDalizes.entity.Role;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.AuthRequest;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.CustomerDto;
 import fr.eql.ai113.LesVentsDalizes.exceptions.AccountExistsException;
+import fr.eql.ai113.LesVentsDalizes.exceptions.ClassCastLongException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentRoleException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -15,7 +17,10 @@ public interface UserService extends UserDetailsService {
     Authentication authenticate(AuthRequest authRequest) throws AuthenticationException;
 //   OLD UserDetails save(String username, String password) throws AccountExistsException;
 //    UserDetails save(AuthRequest authRequest) throws AccountExistsException, NonExistentRoleException;
-    UserDetails save(Customer customer) throws AccountExistsException, NonExistentRoleException;
+    UserDetails save(CustomerDto customerDto) throws
+            AccountExistsException,
+            NonExistentRoleException,
+            ClassCastLongException;
     String generateJwtForUser(UserDetails user);
     UserDetails getUserFromJwt(String jwt);
 

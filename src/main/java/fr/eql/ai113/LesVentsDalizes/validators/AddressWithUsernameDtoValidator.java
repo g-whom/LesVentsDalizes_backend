@@ -30,10 +30,7 @@ public class AddressWithUsernameDtoValidator implements Validator {
 
         AddressWithUsernameDto addressWithUsernameDto = (AddressWithUsernameDto) target;
         if(addressWithUsernameDto.getAddressDto() == null ){
-            errors.rejectValue(
-                    "addressDto",
-                    "field.required",
-                    "L4adresse doit être presnte");
+            errors.reject("typeMismatch", "L'adresse semble être absente ");
         }else{
             addressDtoValidator.validate(addressWithUsernameDto, errors);
         }

@@ -4,8 +4,11 @@ import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
 import fr.eql.ai113.LesVentsDalizes.entity.Role;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.AuthRequest;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.CustomerDto;
 import fr.eql.ai113.LesVentsDalizes.exceptions.AccountExistsException;
+import fr.eql.ai113.LesVentsDalizes.exceptions.ClassCastLongException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentRoleException;
+import fr.eql.ai113.LesVentsDalizes.repository.AddressDao;
 import fr.eql.ai113.LesVentsDalizes.repository.CustomerDao;
 import fr.eql.ai113.LesVentsDalizes.repository.RoleDao;
 import fr.eql.ai113.LesVentsDalizes.service.RegistrationService;
@@ -46,6 +49,7 @@ public class UserServiceImpl implements UserService {
     private final String signingKey;
 
     private RoleDao roleDao;
+    private AddressDao addressDao;
 
     /// CONSTRUCTOR ///
 
@@ -62,146 +66,123 @@ public class UserServiceImpl implements UserService {
 
     /// @OVERIDE ///
 
-
-//    @Override
-//    public Authentication authenticate(String username, String password) throws AuthenticationException {
-//        Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
-//        logger.info(authentication.toString());
-//        logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>\r\n");
-//        return authenticationManager.authenticate(authentication);
-//    }
-
         @Override
     public Authentication authenticate(AuthRequest authRequest) throws AuthenticationException {
         Authentication authentication = new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword());
-        logger.info(authentication.toString());
-        logger.info(">>>>>>>>>>authenticate>>(doit retourner la valeur Authentication)>>>>>>>>>>>>>>\r\n");
         return authenticationManager.authenticate(authentication);
     }
 
+    /**
+     * <h3>This method allows to register a Customer from the CustomerDto taken in parameter.</h3>
+     *
+     * @param customerDto
+     * @return
+     * @throws AccountExistsException
+     * @throws NonExistentRoleException
+     * @throws ClassCastLongException
+     *
+     * @Author J.VENT
+     */
     @Override
-//    public UserDetails save(AuthRequest authRequest) throws AccountExistsException, NonExistentRoleException {
-    public UserDetails save(Customer customer) throws AccountExistsException, NonExistentRoleException {
+    public UserDetails save(CustomerDto customerDto) throws
+            AccountExistsException,
+            NonExistentRoleException,
+            ClassCastLongException{
 
-
-        logger.info("In [UserServiceImple > save] customer ? "+customer.toString());
-        //if (ownerDao.findByLogin(username) != null) {
-        if (customerDao.findCustomerByUsername(customer.getUsername()) != null) {
+        if (customerDao.findCustomerByUsername(customerDto.getUsername()) != null) {
             throw new AccountExistsException();
         }
 
         //Get id address
-        Address addressValidate = customer.getAddress();
-        logger.info("Affichons l'adresse ? " + customer.getAddress().toString());
+        Address addressValidate = customerDto.getAddress();
 
+
+        //verifie si l'adresse est déja dans le system
         if (registrationService.checkIfAddressAlreadyUsed(addressValidate) != null) {
-            addressValidate = registrationService.checkIfAddressAlreadyUsed(addressValidate);
-            logger.info("voici l'adresse qui doit etre ajoutéee : "+addressValidate.toString());
-
+            addressValidate = registrationService.checkIfAddressAlreadyUsed(customerDto.getAddress());
+        }else {
+            addressValidate= addressDao.save(addressValidate);
         }
-        Address addressCustomerValidate = registrationService.createAddresseCustomer(addressValidate);
-
-        logger.info("VERIFION => l'adresse recupéee >>>>>>>>>>>>>>>> : " + addressCustomerValidate.toString());
-
-//        authRequest.setAddress(addressCustomerValidate);
-//        authRequest.setSubscriptionDate(LocalDate.now());
-//        authRequest.setAddress_id(addressValidate.getId());
 
 
-        logger.info(" Afffiche le nom: " + customer.getName() + "\r\n .....");
-        logger.info(" Afffiche le username: " + customer.getUsername() + "\r\n .....");
-        logger.info(" Afffiche le password : " + customer.getPassword() + "\r\n .....");
-        Customer owner = new Customer();
-        owner.setName(customer.getName());
-        owner.setSurname(customer.getSurname());
-        owner.setPhoneNumber(customer.getPhoneNumber());
-
-        owner.setPassword(passwordEncoder().encode(customer.getPassword()));
-        owner.setSubscriptionDate(customer.getSubscriptionDate());
-        owner.setUsername(customer.getUsername());
-        owner.setBirthdate(customer.getBirthdate());
+        Customer owner = customerDto.convertCustomerDtoToCustomer();
         owner.setAddress(addressValidate);
+        owner.setPassword(passwordEncoder().encode( customerDto.getPassword()));
         owner.setSubscriptionDate(LocalDate.now());
+
+        //4L : ROLE_USER
+        Collection<Role> roleCollectionValidate = feedCustomerDtoRole(customerDto, 4L);
+        if (!roleCollectionValidate.isEmpty()){
+
+            owner.setRoles(roleCollectionValidate);
+        }
+
+        customerDao.save(owner);
+        return owner.convertCustomerToCustomerDtoWithoutPassword();
+    }
+
+
+    /**
+     * This method will assign either roles detected in the client attributes or the default one
+     *
+     * @param customerDto
+     * @param defaultRoleId
+     *
+     * @return - the collection of roles obtained
+     * @throws NonExistentRoleException
+     * @throws ClassCastLongException - if the expected type 'Long' is not found
+     * @Author : J.VENT
+     */
+    private Collection<Role> feedCustomerDtoRole( CustomerDto customerDto, Long defaultRoleId)
+            throws NonExistentRoleException, ClassCastLongException{
+
+        if (!(defaultRoleId instanceof Long) ){
+            logger.info("Le type attendu est Long pour : defaultRoleId neanmoins le type troubée est :"+
+                    defaultRoleId.getClass().getSimpleName()+" !!");
+            throw new ClassCastLongException("Une Erreur de typage détectée");
+        }
+
 
         Collection<Role> roleCollectionValidate = new ArrayList<>();
 
-        if (customer.getAuthorities().isEmpty()){// authRequest.getRoles().isEmpty()) {
-            logger.info("PAs de ROLE TROUVE.. On S'EN Occupe.. :\t\r\n");
+        if (customerDto.getAuthorities().isEmpty()){
             //creation de la collection
-            Collection<Role> roleCoellectionCustomer = new ArrayList<Role>();//new Role(3L);
+            Collection<Role> roleCoellectionCustomer = new ArrayList<Role>();
 
-            // update => recuperation
-            //Role roleCustomer = new Role(3L);
-            //4 : ROLE_USER
-            Optional<Role> roleCustomer = roleDao.findById(4L);
+            Optional<Role> roleCustomer = roleDao.findById(defaultRoleId);
             if (!roleCustomer.isPresent()){
                 throw new NonExistentRoleException();
             }
+
             roleCoellectionCustomer.add(roleCustomer.get());
-            customer.setRoles(roleCoellectionCustomer);
+            customerDto.setRoles(roleCoellectionCustomer);
+
             // authRequest.setRoles(roleCoellectionCustomer);
             roleCollectionValidate.add(roleCustomer.get());
         }else{
             // gestion des roles
-            Collection<Role> roleCollection = (Collection<Role>) customer.getAuthorities(); // authRequest.getRoles();
+            Collection<Role> roleCollection = (Collection<Role>) customerDto.getAuthorities();
 
             // Obtention d'un itérateur pour la collection
             Iterator<Role> it = roleCollection.iterator();
 
-
-            // Utilisation de l'itérateur pour parcourir la collection
-            logger.info("AFFICHONS LES ROLES TROUVES :\t\r\n");
-            logger.info("il y en a normalement : " +customer.getAuthorities().size()); // authRequest.getRoles().size());
             while (it.hasNext()) {
                 Role element = it.next();
-                //saving...
-                logger.info("un role detecté, voila son ID >> : " + element.toString());
-
-                logger.info("essayons de le recuperer franchement / ");
 
                 Optional<Role> roleCustomer = roleDao.findById(element.getId());
                 if (!roleCustomer.isPresent()){
                     throw new NonExistentRoleException();
                 }
                 Role roleValidate = roleCustomer.get();
-                logger.info("voila le role recupeéré : "+roleValidate.toString());
-                logger.info("il est donc ajouté à la collection ");
                 roleCollectionValidate.add( roleValidate);
 
             }
         }
-        if (!roleCollectionValidate.isEmpty()){
-            logger.info("Ajout des roles mis a jout pour le custimer ...");
-            owner.setRoles(roleCollectionValidate);
-        }
 
-        logger.info(" avant inzertuin en base quelles intformation avaons nous pour le customer ? : "+owner.toString() );
-        customerDao.save(owner); // ownerDao.save(owner);
-        logger.info(" le client apres insert supposé OK  :  "+owner.toString());
-       // customerDao.save(owner); // ownerDao.save(owner);
-        return owner;
+        return roleCollectionValidate;
     }
-//
-//    @Override
-//    public UserDetails save(String username, String password) throws AccountExistsException {
-//        //if (ownerDao.findByLogin(username) != null) {
-//        if (customerDao.findCustomerByEmail(username) != null) {
-//            throw new AccountExistsException();
-//        }
-//        Customer owner = new Customer();
-//        owner.setEmail(username);//owner.setLogin(username);
-//        owner.setPassword(passwordEncoder().encode(password));
-//        customerDao.save(owner); // ownerDao.save(owner);
-//        return owner;
-//    }
 
-//    @Override
-//    public String generateJwtForUser(UserDetails user) {
-//        Date now = new Date();
-//        Date expirationDate = new Date(now.getTime() + 3600 * 1000);
-//        return Jwts.builder().setSubject(user.getUsername()).setIssuedAt(now).setExpiration(expirationDate)
-//                .signWith(SignatureAlgorithm.HS512, signingKey).compact();
-//    }
+
     @Override
     public String generateJwtForUser(UserDetails user) {
         Date now = new Date();
@@ -210,19 +191,12 @@ public class UserServiceImpl implements UserService {
                 .signWith(SignatureAlgorithm.HS512, signingKey).compact();
     }
 
-    // ??
+
 
 
     @Override
     public UserDetails getUserFromJwt(String jwt) {
-        logger.info(">>on  entre  dans [UserServiceImpl > getUserFromJwt]");
         String username = getUsernameFromToken(jwt);
-
-       // String email = getUsernameFromToken(jwt);
-      //  logger.info(">> [UserServiceImpl > getUserFromJwt] recuêration du mail : "+email);
-        logger.info(">> [UserServiceImpl > getUserFromJwt] recuêration du mail : "+username);
-
-//        return loadUserByUsername(email);
          return loadUserByUsername(username);
     }
 
@@ -245,7 +219,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        //Owner owner = ownerDao.findByLogin(username);
         Customer owner = customerDao.findCustomerByUsername(username);
         if (owner == null) {
             throw new UsernameNotFoundException("Le propriétaire n'a pas été trouvé.");
@@ -275,5 +248,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public void setRoleDao(RoleDao roleDao) {
         this.roleDao = roleDao;
+    }
+
+    @Autowired
+    public void setAddressDao(AddressDao addressDao) {
+        this.addressDao = addressDao;
     }
 }

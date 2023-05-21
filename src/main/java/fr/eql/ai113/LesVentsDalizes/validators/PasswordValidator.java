@@ -2,7 +2,7 @@ package fr.eql.ai113.LesVentsDalizes.validators;
 
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
 import fr.eql.ai113.LesVentsDalizes.entity.Member;
-import fr.eql.ai113.LesVentsDalizes.entity.dto.AddressWithUsernameDto;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.CustomerDto;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.PasswordDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,10 @@ public class PasswordValidator implements Validator {
     @Override
     public boolean supports(Class<?> clazz) {
         //return false;
-        return Member.class.equals(clazz) || Customer.class.equals(clazz) ;
+        return Member.class.equals(clazz)
+                || Customer.class.equals(clazz)
+                || CustomerDto.class.equals(clazz)
+                || PasswordDto.class.equals(clazz);
     }
 
     /**
@@ -46,16 +49,21 @@ public class PasswordValidator implements Validator {
                 Customer customer = (Customer) target;
                 validatePassword(customer.getPassword().trim(),errors);
                 break;
+            case "CustomerDto":
+                CustomerDto customerDto = (CustomerDto) target;
+                validatePassword(customerDto.getPassword(), errors);
+                isIdenticalPassword(customerDto.getPassword(), customerDto.getConfirmPassword(), errors);
+                break;
             case "PasswordDto":
                 PasswordDto passwordDto = (PasswordDto) target;
-                validatePassword(passwordDto.getPasswordNew().trim(),errors);
-                validatePassword(passwordDto.getPasswordNewBis().trim(),errors);
-                //
+                validatePassword(passwordDto.getPasswordNew(),errors);
+                validatePassword(passwordDto.getPasswordNewBis(),errors);
                 // validatePassword(passwordDto.getPassword().trim(),errors);
                 isIdenticalPassword(passwordDto.getPasswordNew(), passwordDto.getPasswordNewBis(), errors);
                 break;
             default:
                 logger.info("Type d'objet non encore reconnu, (WIP: update EmailValidator)");
+                logger.info("Le type semble etre : " + target.getClass().getSimpleName());
                 errors.reject("typeMismatch", "La valeur récupérée n'est pas reconnue");
         }
 
@@ -108,29 +116,25 @@ public class PasswordValidator implements Validator {
             errors.rejectValue("password", "password.special",
                     "Le mot de passe doit comporter au moins un caractère spécial");
         }
-//    }
-//}
-        //----------------------
+
     }
 
 
+    /**
+     * This method checks if the two passwords are identical
+     * @param passwordOne
+     * @param passwordTwo
+     * @param errors
+     *
+     * @Author: J.VENT
+     */
     private void isIdenticalPassword(String passwordOne, String passwordTwo, Errors errors){
 
-        /*
-        String chaine1 = "Première chaîne";
-String chaine2 = "Deuxième chaîne";
-String regex = "^\\s*(?i)" + Pattern.quote(chaine1) + "(?-i)\\s*$";
-boolean result = Pattern.matches(regex, chaine2);
 
-        ------------------------------
-        String chaine1 = "Première chaîne";
-String chaine2 = "Deuxième chaîne";
-boolean result = chaine1.matches("(?i)" + Pattern.quote(chaine2));
+        if (!passwordOne.equals(passwordTwo) ) {
+            logger.info("LEs deux mots de passe ne sont pas identique !!!");
+            errors.reject("typeMismatch", "Une anomalie détectée pour les identifiants ");
 
-         */
-        if (!passwordOne.matches("(?i)" + Pattern.quote(passwordTwo)) ){
-            errors.rejectValue("passwordNew", "password.identical",
-                    "Le mot de passe doit être identique dans les deux saisies");
         };
 
 

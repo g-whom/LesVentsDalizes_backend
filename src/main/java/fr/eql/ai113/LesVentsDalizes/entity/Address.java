@@ -1,5 +1,7 @@
 package fr.eql.ai113.LesVentsDalizes.entity;
 
+import fr.eql.ai113.LesVentsDalizes.entity.dto.AddressDto;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -19,20 +21,20 @@ public class Address {
 
     @Column(name = "number_road")
     private String numberRoad;
-    @NotNull(message = "La voie doit etre renseignée")
-    @NotEmpty(message = "la voie doit etre renseignée")
+//    @NotNull(message = "La voie doit etre renseignée")
+//    @NotEmpty(message = "la voie doit etre renseignée")
     @Column(name = "road")
     private String road;
-    @NotNull(message = "Le code postal doit etre renseigné")
-    @NotEmpty(message = "Le code postal doit etre renseign")
+//    @NotNull(message = "Le code postal doit etre renseigné")
+//    @NotEmpty(message = "Le code postal doit etre renseign")
     @Column(name = "zip_code")
     private String zipCode;
-    @NotNull(message = "La ville doit etre renseignée")
-    @NotEmpty(message = "la vilee doit etre renseignée")
+//    @NotNull(message = "La ville doit etre renseignée")
+//    @NotEmpty(message = "la vilee doit etre renseignée")
     @Column(name = "city")
     private String city;
-    @NotNull(message = "Le pays doit etre renseigné")
-    @NotEmpty(message = "la pays doit etre renseigné")
+//    @NotNull(message = "Le pays doit etre renseigné")
+//    @NotEmpty(message = "la pays doit etre renseigné")
     @Column(name = "country")
     private String country;
 
@@ -61,8 +63,11 @@ public class Address {
      * @param country
      */
     public Address(Long id, String numberRoad, String road, String zipCode, String city, String country) {
-        //this.id = id;
-        setId(id);
+
+        if (id != null){
+            setId(id);
+        }
+
         //this.numberRoad =
         setNumberRoad(numberRoad);
         //this.road =
@@ -77,6 +82,25 @@ public class Address {
 
 
     ///////////////// METHODES
+
+    /**
+     * <h3>This method converts an object of 'Address' into AddressDto</h3>
+     *
+     * @return - Address
+     */
+    public AddressDto convertAddressToAdressDto( ){
+        AddressDto addressDto = new AddressDto();
+        if (this.getId() != null){
+            addressDto.setId(this.getId());
+        }
+        addressDto.setNumberRoad(this.getNumberRoad());
+        addressDto.setRoad(this.getRoad());
+        addressDto.setZipCode(this.getZipCode());
+        addressDto.setCity(this.getCity());
+        addressDto.setCountry(this.getCountry());
+
+        return addressDto;
+    }
 
     String normaliseString(String inputText){
         return inputText

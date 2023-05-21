@@ -3,6 +3,7 @@ package fr.eql.ai113.LesVentsDalizes.validators;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
 import fr.eql.ai113.LesVentsDalizes.entity.Member;
 import fr.eql.ai113.LesVentsDalizes.entity.dto.AddressWithUsernameDto;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.CustomerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,10 @@ public class EmailValidator implements Validator {
     @Override
     public boolean supports(Class<?> clazz) {
         //return false;
-        return Member.class.equals(clazz) || Customer.class.equals(clazz) ;
+        return Member.class.equals(clazz)
+                || Customer.class.equals(clazz)
+                || CustomerDto.class.equals(clazz)
+                || AddressWithUsernameDto.class.equals(clazz);
     }
 
     /**
@@ -38,14 +42,20 @@ public class EmailValidator implements Validator {
                 Customer customer = (Customer) target;
                 validateEmail(customer.getUsername(),errors);
                 break;
+            case "CustomerDto":
+                logger.info("le type  (CustomerDto) bien detecteé ");
+                CustomerDto customerDto = (CustomerDto) target;
+                validateEmail(customerDto.getUsername(),errors);
+                break;
             case "AddressWithUsernameDto":
-                logger.info("le tpde  (AddressWithUsernameDto) bien detecteé ");
+                logger.info("le type  (AddressWithUsernameDto) bien detecteé ");
                 AddressWithUsernameDto addressWithUsernameDto = (AddressWithUsernameDto) target;
                 validateEmail(addressWithUsernameDto.getUsername(), errors);
                 break;
 
             default:
-                logger.info("Type d'objet non encore reconnu, (WIP: update EmailValidator)");
+                logger.info("Type d'objet non encore reconnu, (WIP: update EmailValidator*)");
+                logger.info("Le type semble etre : " + target.getClass().getSimpleName());
                 errors.reject("typeMismatch", "La valeur récupérée n'est pas reconnue");
         }
 
@@ -53,7 +63,7 @@ public class EmailValidator implements Validator {
 
 
     /**
-     * this method ceck that the email field is valid
+     * this method check that the email field is valid
      * and that the email is valid
      * @param email :
      * @param errors
@@ -62,26 +72,13 @@ public class EmailValidator implements Validator {
      * @Author J.Vent
      */
     private void validateEmail(String email, Errors errors){
-        logger.info("Alors la regex fait son taff ou non ? ");
+        logger.info("Alors la regex pour ValideEMail son taff ou non ? ");
 
         if (email == null || email.isEmpty()){
             errors.reject("typeMismatch", "Email doit etre renseiné");
-        }
-
-        if (!email.matches(EMAIL_REGEX)){
+        }else if (!email.matches(EMAIL_REGEX)){
             errors.reject("typeMismatch", "Email semble invalide");
         }
-        /*
-        try{
-            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "field.required", "Le champ 'Email' doit être renseigné");
 
-            if (!org.apache.commons.validator.EmailValidator.getInstance().isValid(email)) {
-                logger.info("alors la mail ne dois pas etre valide hein !!");
-                errors.rejectValue("email", "invalid.email", "L'adresse email n'est pas valide");
-            }
-        }catch(Exception e){
-            logger.info("voici l'exception attrapée "+e.getMessage());
-        }
-        */
     }
 }

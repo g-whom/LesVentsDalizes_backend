@@ -2,10 +2,7 @@ package fr.eql.ai113.LesVentsDalizes.controller.rest;
 
 import fr.eql.ai113.LesVentsDalizes.entity.Address;
 import fr.eql.ai113.LesVentsDalizes.entity.Customer;
-import fr.eql.ai113.LesVentsDalizes.entity.dto.AddressDto;
-import fr.eql.ai113.LesVentsDalizes.entity.dto.AddressWithUsernameDto;
-import fr.eql.ai113.LesVentsDalizes.entity.dto.PasswordDto;
-import fr.eql.ai113.LesVentsDalizes.entity.dto.UsernameDto;
+import fr.eql.ai113.LesVentsDalizes.entity.dto.*;
 import fr.eql.ai113.LesVentsDalizes.exceptions.AddressExistException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentAddressException;
 import fr.eql.ai113.LesVentsDalizes.exceptions.NonExistentCustomerException;
@@ -29,6 +26,12 @@ import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * WIP | WAIT
+ *
+ * @Author J.VENT
+ */
 @RestController
 @RequestMapping("customers")
 @CrossOrigin(origins = "${front.url}")
@@ -67,7 +70,7 @@ public class DataManagmentCustomerRestController {
 
 
     /**
-     * <h3>This method tries to find an address in the system according to the id of the client.<br/>
+     * <h3>This controller tries to find an address in the system according to the id of the client.<br/>
      * The address is returned if it is found.</h3>
      *
      * @param idCustomer
@@ -117,6 +120,8 @@ public class DataManagmentCustomerRestController {
      * @param addressWithUsernameDto
      * @param result
      * @return
+     *
+     * @Author J.VENT
      */
     @PostMapping("/update/address/customer")
     public ResponseEntity<?> updateCustomerAddressFromUsername(
@@ -167,6 +172,15 @@ public class DataManagmentCustomerRestController {
     }
 
 
+    /**
+     * <h3>this controller is in charge of managing the search of a customer according to the username<br/>
+     * (email) provided in parameters</h3>
+     * @param usernameCustomer
+     * @return
+     * @throws NonExistentCustomerException
+     *
+     * @Author J.VENT
+     */
     @GetMapping("/search/username/{usernameCustomer}")
     public ResponseEntity<?> retrieveCustomerByUsername(@PathVariable String usernameCustomer) throws NonExistentCustomerException {
 
@@ -182,6 +196,12 @@ public class DataManagmentCustomerRestController {
     }
 
 
+    /**
+     * <h3>this controller is in charge of searching all the customers of the system</h3>
+     * @return
+     *
+     * @Author: J.VENT
+     */
     @GetMapping("/search/all")
     public ResponseEntity<?> fetchAllCustomer(){
 
@@ -215,6 +235,7 @@ public class DataManagmentCustomerRestController {
      * @return
      * @throws NonExistentCustomerException
      * @throws NonExistentAddressException
+     * @Author : J.VENT
      */
 
     //http://localhost:8097/customers/address/customer/2
@@ -242,9 +263,11 @@ public class DataManagmentCustomerRestController {
     }
 
     /**
-     * WIP: Retrouver une addresse depuis son Id
+     * <h3>this controller is in charge of searching an address in the system using its identifier.</h3>
      * @param idAddress
      * @return
+     *
+     * @Author: J.VENT
      */
     @GetMapping("/address/{idAddress}")
     public ResponseEntity<?> fetchAddressFromId(@PathVariable Long idAddress){
@@ -269,6 +292,14 @@ public class DataManagmentCustomerRestController {
     //suppréssion du compte du customer | member
 
     // WIP (exception AddressExistException plus utilie)
+    /**
+     * <h3>This controller is responsible for changing the address of a customer.</h3>
+     * @param idCustomer
+     * @param address
+     * @return
+     *
+     * @Author J.VENT
+     */
     @PutMapping("/new/address/customer/{idCustomer}")
     public ResponseEntity<?> updateAddressCustomer(@PathVariable Long idCustomer, @RequestBody Address address){
 
@@ -304,6 +335,14 @@ public class DataManagmentCustomerRestController {
 
     }
 
+    /**
+     * <h3>This controller is in charge of updating the data of a customer</h3>
+     * @param customer
+     * @return
+     * @throws NonExistentCustomerException
+     *
+     * @Author J.VENT
+     */
     @PostMapping ("/update/data/customer")
     public ResponseEntity<?> updateDataCustomer(@RequestBody Customer customer) throws NonExistentCustomerException{
         // Posstman: http://localhost:8097/customers/update/data/customer
@@ -321,7 +360,7 @@ public class DataManagmentCustomerRestController {
         */
         try {
             Customer customerUpdate = dataManagementCustomerService.updateCustomerData(customer);
-            return ResponseEntity.ok(customerUpdate);
+            return ResponseEntity.ok(customerUpdate.convertCustomerToCustomerConnectDto());
         }catch (NonExistentCustomerException e){
             logger.info("Une anomalie détectée, le client ayant l'id n'est pas reconnu par le System");
             return ResponseEntity.badRequest().body(""+e);
@@ -331,7 +370,14 @@ public class DataManagmentCustomerRestController {
         }
     }
 
-    //WIP :
+
+    /**
+     * This controller is responsible for updating the customer's connection password
+     * @param passwordDto
+     * @param result
+     * @return*
+     * @Author J.VENT
+     */
     @PostMapping("update/password/customer")
     public ResponseEntity<?> updatePasswordCustomer(@RequestBody PasswordDto passwordDto,  BindingResult result) {
         /*
@@ -379,11 +425,18 @@ public class DataManagmentCustomerRestController {
     }
 
 
-
+    /**
+     * <h3>This controller is in charge of updating the customer's login (email)</h3>
+     * @param usernameDto
+     * @param result
+     * @return
+     *
+     * @Author J.VENT
+     */
     @PostMapping("update/username/customer")
     public ResponseEntity<?> updateUsernameCustomer(@RequestBody UsernameDto usernameDto , BindingResult result){
 
-        logger.info("tcehck UsernameDto:  ");
+        logger.info(" - - - - \t\t\t on entre dans updateUsernameCustomer  UsernameDto:  ");
 
         /*
         Posstman:       http://localhost:8097/customers/update/username/customer
@@ -419,7 +472,8 @@ public class DataManagmentCustomerRestController {
 
         try {
             Customer customerUpdate = dataManagementCustomerService.updateCustomerUsername(usernameDto);
-            return ResponseEntity.ok(customerUpdate);
+            CustomerConnectDto customerConnectDto = customerUpdate.convertCustomerToCustomerConnectDto();
+            return ResponseEntity.ok(customerConnectDto);
         }catch (NonExistentCustomerException e){
             logger.info("Une anomalie s'est produite : Customer introuvable");
             return ResponseEntity.badRequest().body(""+e);
