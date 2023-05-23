@@ -77,8 +77,8 @@ public class CustomerValidator implements Validator {
      */
     @Override
     public void validate(Object target, Errors errors) {
-        logger.info("On entre dans validate de CustomerValidator");
-        logger.info("Voici le type d'object ciblé : "+target.getClass().getSimpleName());
+        //logger.info("On entre dans validate de CustomerValidator");
+        logger.info("Oobject ciblé : "+target.getClass().getSimpleName());
 
         switch (target.getClass().getSimpleName()){
             case "Customer":
@@ -90,7 +90,7 @@ public class CustomerValidator implements Validator {
                 passwordValidator.validate(customer, errors);
 
                 if (customer.getAddress() == null){
-                    errors.reject("typeMismatch", "L'adress est absente ");
+                    errors.reject("typeMismatch", "L'adresse est absente ");
                 }else {
                     addressDtoValidator.validate(customer, errors);
                 }
@@ -110,7 +110,7 @@ public class CustomerValidator implements Validator {
                // validateBirthdateFormate(customerDto.getBirthdate(), errors);
 
                if (customerDto.getAddress() == null){
-                    logger.info("  --- >>>>>>>>>>>>>>>>>  NULL OR WHAT >>>>>>>>>>>>>> --------");
+                   // logger.info("  --- >>>>>>>>>>>>>>>>>  NULL OR WHAT >>>>>>>>>>>>>> --------");
                     errors.reject("typeMismatch", "L'adress est absente ");
                 }else {
                     addressDtoValidator.validate(customerDto, errors);

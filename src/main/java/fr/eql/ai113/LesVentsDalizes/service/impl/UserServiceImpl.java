@@ -36,7 +36,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Service
-@Configuration
+//@Configuration
 public class UserServiceImpl implements UserService {
     Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -47,7 +47,6 @@ public class UserServiceImpl implements UserService {
     private RegistrationService registrationService;
 
     private final String signingKey;
-
     private RoleDao roleDao;
     private AddressDao addressDao;
 
@@ -59,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /// METHODS ///
-    @Bean
+    @Autowired
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -229,6 +228,14 @@ public class UserServiceImpl implements UserService {
     /// GETTERS ///
     /// SETTER ///
 
+    /*
+
+    private AuthenticationManager authenticationManager;
+    private RegistrationService registrationService;
+                        private final String signingKey;
+    private RoleDao roleDao;
+    private AddressDao addressDao;
+     */
 
     @Autowired
     public void setCustomerDao(CustomerDao customerDao) {
@@ -244,7 +251,7 @@ public class UserServiceImpl implements UserService {
     public void setRegistrationService(RegistrationService registrationService) {
         this.registrationService = registrationService;
     }
-
+//
     @Autowired
     public void setRoleDao(RoleDao roleDao) {
         this.roleDao = roleDao;

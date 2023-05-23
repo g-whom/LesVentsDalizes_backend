@@ -52,7 +52,7 @@ public class AddressDtoValidator implements Validator {
      */
     @Override
     public void validate(Object target, Errors errors) {
-        logger.info("on entre bien dans >> validate [AddressDtoValidator]");
+        //logger.info("on entre bien dans >> validate [AddressDtoValidator]");
         AddressDto addressDto;
 
         switch (target.getClass().getSimpleName()){
@@ -61,10 +61,10 @@ public class AddressDtoValidator implements Validator {
                 validateAddressDto(addressDto, errors);
                 break;
             case "AddressWithUsernameDto":
-                logger.info("le types est bien reconnue a savvoir : AddressWithUsernameDto");
+                //logger.info("le types est bien reconnue a savvoir : AddressWithUsernameDto");
                 AddressWithUsernameDto addressWithUsernameDto =  (AddressWithUsernameDto) target;
                 addressDto = addressWithUsernameDto.getAddressDto();
-                logger.info("Affichons le contenu de l'addresse : "+addressDto.toString());
+                //logger.info("Affichons le contenu de l'addresse : "+addressDto.toString());
                 validateAddressDto(addressDto, errors);
                 break;
             case "CustomerDto":
@@ -90,7 +90,7 @@ public class AddressDtoValidator implements Validator {
      * @Autor : J.VENT
      */
     private void validateAddressDto(AddressDto addressDto, Errors errors){
-
+        logger.info("regex - (address | addressDto..) ");
 
         Long numberId = addressDto.getId();
 

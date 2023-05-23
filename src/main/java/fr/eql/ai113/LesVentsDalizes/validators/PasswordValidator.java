@@ -86,6 +86,7 @@ public class PasswordValidator implements Validator {
      * @return void              
      */
     private void validatePassword(String password, Errors errors){
+        logger.info("regex - (ValidatePassword)");
         //----------------------
         if (password.length() < 8) {
             errors.rejectValue("password", "password.length",
@@ -132,7 +133,7 @@ public class PasswordValidator implements Validator {
 
 
         if (!passwordOne.equals(passwordTwo) ) {
-            logger.info("LEs deux mots de passe ne sont pas identique !!!");
+           // logger.info("LEs deux mots de passe ne sont pas identique !!!");
             errors.reject("typeMismatch", "Une anomalie détectée pour les identifiants ");
 
         };

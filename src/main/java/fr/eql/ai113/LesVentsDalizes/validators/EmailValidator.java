@@ -72,7 +72,7 @@ public class EmailValidator implements Validator {
      * @Author J.Vent
      */
     private void validateEmail(String email, Errors errors){
-        logger.info("Alors la regex pour ValideEMail son taff ou non ? ");
+        logger.info("regex - (validateEmail)");
 
         if (email == null || email.isEmpty()){
             errors.reject("typeMismatch", "Email doit etre renseiné");
