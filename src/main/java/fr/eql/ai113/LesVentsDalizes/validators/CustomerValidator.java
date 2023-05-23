@@ -84,7 +84,7 @@ public class CustomerValidator implements Validator {
             case "Customer":
                 Customer customer = (Customer) target;
                 validateName(customer.getName().trim(),errors);
-                validateSurnamee(customer.getSurname(), errors);
+                validateSurname(customer.getSurname(), errors);
                 validatePhoneNumber(customer.getPhoneNumber(), errors);
                 emailValidator.validate(customer, errors);
                 passwordValidator.validate(customer, errors);
@@ -103,7 +103,7 @@ public class CustomerValidator implements Validator {
             case "CustomerDto":
                 CustomerDto customerDto = (CustomerDto) target;
                 validateName(customerDto.getName(), errors);
-                validateSurnamee(customerDto.getSurname(),errors);
+                validateSurname(customerDto.getSurname(),errors);
                 validatePhoneNumber(customerDto.getPhoneNumber(),errors);
                 emailValidator.validate(customerDto, errors);
                 passwordValidator.validate(customerDto, errors);
@@ -136,7 +136,7 @@ public class CustomerValidator implements Validator {
      * @Author J.VENT
      */
     private void validateName(String name, Errors errors){
-        logger.info("ALors  la regex c'est pour bientot heun  (validateNAme)");
+        logger.info("regex - (validateNAme)");
 
         if (name == null || name.isEmpty()){
             errors.reject("typeMismatch", "Nom doit etre renseigné");
@@ -152,8 +152,8 @@ public class CustomerValidator implements Validator {
      *
      * @Author J.VENT
      */
-    private void validateSurnamee(String surname, Errors errors){
-        logger.info("ALors  la regex c'est pour bientot heun (ValidateSurname) ");
+    private void validateSurname(String surname, Errors errors){
+        logger.info("regex - (ValidateSurname) ");
 
         if (surname == null || surname.isEmpty()){
             errors.reject("typeMismatch", "Le prénom doit etre renseigné");
@@ -171,7 +171,7 @@ public class CustomerValidator implements Validator {
      * @Athor J.VENT
      */
     private void validatePhoneNumber(String phoneNumber , Errors errors){
-        logger.info("ALors  la regex c'est pour bientôt heun (ValidatePhoneNumber) ");
+        logger.info("regex - (ValidatePhoneNumber) ");
         if (phoneNumber == null || phoneNumber.isEmpty()){
             errors.reject("typeMismatch", "Le numéro de téléphone doit etre renseigné");
         } else if (phoneNumber.matches(PHONENUMBER_REGEX)) {
