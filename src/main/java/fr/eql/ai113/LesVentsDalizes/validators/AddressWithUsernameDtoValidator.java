@@ -26,7 +26,7 @@ public class AddressWithUsernameDtoValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        logger.info("on est bien dans [AddressWithUsernameDtoValidator >> validate] ");
+//        logger.info("on est bien dans [AddressWithUsernameDtoValidator >> validate] ");
 
         AddressWithUsernameDto addressWithUsernameDto = (AddressWithUsernameDto) target;
         if(addressWithUsernameDto.getAddressDto() == null ){
