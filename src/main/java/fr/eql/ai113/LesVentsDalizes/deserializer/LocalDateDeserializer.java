@@ -84,8 +84,8 @@ public class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
             return date;
 
         }catch(DateTimeParseException e){
-            logger.info("\"Format de date invalide. yo yo  Utilisez le format 'yyyy-MM-dd'.");
-            //throw new JsonParseException(jsonParser,"Format de date  wesh invalide", e);
+//            logger.info("\"Format de date invalide. yo yo  Utilisez le format 'yyyy-MM-dd'.");
+
             throw new InvalidDateFormatException("");
         }
         // return null;
@@ -101,13 +101,11 @@ public class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
      */
     private String convertPotentialLocalDateToString(Object variable){
         if (variable instanceof LocalDate){
-            logger.info("On a bien detecteé un type LocalDate");
+//            logger.info("On a bien detecteé un type LocalDate");
             LocalDate localDate = (LocalDate) variable;
 
-            logger.info("le type en sortie sera : "+variable.toString());
             return variable.toString();
         }
-        logger.info("c'est d'office le bon type MAsh halla : "+variable);
         return (String) variable;
 
     }
@@ -126,12 +124,12 @@ public class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
             logger.info("On a bien detecteé un type LocalDate");
             LocalDateTime localDateTime = (LocalDateTime) variable;
 
-            logger.info("le type en sortie sera : "+variable.toString());
+//            logger.info("le type en sortie sera : "+variable.toString());
 
              dateFormatted = normaliseLocalDateTimeWithHeightDigit(variable.toString());
             return dateFormatted;
         }
-        logger.info("c'est d'office le bon type MAsh halla (v2) : "+variable);
+
 
         dateFormatted = normaliseLocalDateTimeWithHeightDigit( (String) variable);
         return dateFormatted;
