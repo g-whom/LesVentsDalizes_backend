@@ -20,8 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -47,8 +45,10 @@ public class UserServiceImpl implements UserService {
     private RegistrationService registrationService;
 
     private final String signingKey;
+
     private RoleDao roleDao;
     private AddressDao addressDao;
+
 
     /// CONSTRUCTOR ///
 
@@ -58,16 +58,22 @@ public class UserServiceImpl implements UserService {
     }
 
     /// METHODS ///
-    @Autowired
+    //@Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+
     /// @OVERIDE ///
 
-        @Override
+    @Override
     public Authentication authenticate(AuthRequest authRequest) throws AuthenticationException {
+logger.info("~~~~~~~~~~~~~~ Vew[authenticate>authRequest] : Username"+authRequest.getUsername()
+                +"password : "+authRequest.getPassword());
         Authentication authentication = new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword());
+//  logger.info("View [authentication] : "+authentication);
+//   logger.debug("View (debug)  [authentication] : "+authentication);
+
         return authenticationManager.authenticate(authentication);
     }
 
@@ -95,7 +101,6 @@ public class UserServiceImpl implements UserService {
         //Get id address
         Address addressValidate = customerDto.getAddress();
 
-
         //verifie si l'adresse est déja dans le system
         if (registrationService.checkIfAddressAlreadyUsed(addressValidate) != null) {
             addressValidate = registrationService.checkIfAddressAlreadyUsed(customerDto.getAddress());
@@ -106,8 +111,10 @@ public class UserServiceImpl implements UserService {
 
         Customer owner = customerDto.convertCustomerDtoToCustomer();
         owner.setAddress(addressValidate);
+        //password
         owner.setPassword(passwordEncoder().encode( customerDto.getPassword()));
         owner.setSubscriptionDate(LocalDate.now());
+
 
         //4L : ROLE_USER
         Collection<Role> roleCollectionValidate = feedCustomerDtoRole(customerDto, 4L);
@@ -116,8 +123,9 @@ public class UserServiceImpl implements UserService {
             owner.setRoles(roleCollectionValidate);
         }
 
-        customerDao.save(owner);
-        return owner.convertCustomerToCustomerDtoWithoutPassword();
+        Customer customerUpdated = customerDao.save(owner);
+        //return customerUpdated.convertCustomerToCustomerDtoWithoutPassword();
+        return customerUpdated.convertCustomerToCustomerConnectDto();
     }
 
 
@@ -196,28 +204,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails getUserFromJwt(String jwt) {
         String username = getUsernameFromToken(jwt);
-         return loadUserByUsername(username);
+        return loadUserByUsername(username);
     }
 
     @Override
     public Role retrieveRole(Long id) throws NonExistentRoleException{
 
-       Optional<Role> roleTocheck = roleDao.findById(id) ;
-       if(!roleTocheck.isPresent()){
-           throw new NonExistentRoleException();
-       }
+        Optional<Role> roleTocheck = roleDao.findById(id) ;
+        if(!roleTocheck.isPresent()){
+            throw new NonExistentRoleException();
+        }
         //return null;
         return roleTocheck.get();
     }
 
     private String getUsernameFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(signingKey).parseClaimsJws(token).getBody();
+
         return claims.getSubject();
     }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        //Owner owner = ownerDao.findByLogin(username);
         Customer owner = customerDao.findCustomerByUsername(username);
         if (owner == null) {
             throw new UsernameNotFoundException("Le propriétaire n'a pas été trouvé.");
@@ -228,14 +238,6 @@ public class UserServiceImpl implements UserService {
     /// GETTERS ///
     /// SETTER ///
 
-    /*
-
-    private AuthenticationManager authenticationManager;
-    private RegistrationService registrationService;
-                        private final String signingKey;
-    private RoleDao roleDao;
-    private AddressDao addressDao;
-     */
 
     @Autowired
     public void setCustomerDao(CustomerDao customerDao) {
@@ -251,7 +253,7 @@ public class UserServiceImpl implements UserService {
     public void setRegistrationService(RegistrationService registrationService) {
         this.registrationService = registrationService;
     }
-//
+
     @Autowired
     public void setRoleDao(RoleDao roleDao) {
         this.roleDao = roleDao;
@@ -261,4 +263,6 @@ public class UserServiceImpl implements UserService {
     public void setAddressDao(AddressDao addressDao) {
         this.addressDao = addressDao;
     }
+
+
 }
